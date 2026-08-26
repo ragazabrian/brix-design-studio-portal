@@ -22,24 +22,76 @@ export function Reveal({
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 22 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.4, ease: "easeOut", delay }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1], delay }}
     >
       {children}
     </motion.div>
   );
 }
 
+/** Reveals each child in sequence, so long lists arrive as one calm wave. */
+export function RevealGroup({
+  children,
+  step = 0.08,
+  className,
+}: {
+  children: ReactNode[];
+  step?: number;
+  className?: string | undefined;
+}) {
+  return (
+    <div className={className}>
+      {children.map((child, index) => (
+        <Reveal key={index} delay={index * step}>
+          {child}
+        </Reveal>
+      ))}
+    </div>
+  );
+}
+
+/** Splits a headline into lines that rise in one after another. */
+export function RevealLines({
+  lines,
+  className,
+  delay = 0.1,
+}: {
+  lines: string[];
+  className?: string | undefined;
+  delay?: number;
+}) {
+  const reduce = useReducedMotion();
+
+  return (
+    <span className={className}>
+      {lines.map((line, index) => (
+        <span key={line} className="block overflow-hidden pb-[0.08em]">
+          <motion.span
+            className="block leading-[1.02]"
+            initial={reduce ? false : { y: "110%" }}
+            animate={reduce ? { y: 0 } : { y: 0 }}
+            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: delay + index * 0.1 }}
+          >
+            {line}
+          </motion.span>
+        </span>
+      ))}
+    </span>
+  );
+}
+
 const pillBase =
-  "inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-[15px] font-medium transition-colors";
+  "inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-[15px] font-medium transition-all duration-300 ease-out hover:-translate-y-0.5";
 
 const pillVariants = {
-  solid: "bg-ink text-paper hover:bg-ink/85",
-  outline: "border border-ink text-ink hover:bg-ink hover:text-paper",
-  lime: "bg-lime text-ink hover:bg-lime/85",
-  onDark: "border border-paper/70 text-paper hover:bg-paper hover:text-ink",
+  solid: "bg-ink text-paper hover:bg-brand",
+  outline: "border border-ink text-ink hover:border-brand hover:bg-brand hover:text-paper",
+  brand: "bg-brand text-paper hover:bg-brand-deep",
+  lime: "bg-brand text-paper hover:bg-brand-deep",
+  onDark: "border border-paper/70 text-paper hover:border-paper hover:bg-paper hover:text-ink",
 } as const;
 
 type PillProps = {
@@ -97,7 +149,7 @@ export function ArrowLink({
   className?: string;
 }) {
   const classes = cn(
-    "group inline-flex items-center gap-2 text-[15px] font-medium underline-offset-4 hover:underline",
+    "group inline-flex items-center gap-2 text-[15px] font-medium transition-colors duration-300 hover:text-brand",
     className,
   );
   const inner = (
@@ -107,7 +159,7 @@ export function ArrowLink({
         icon={ArrowRight01Icon}
         size={18}
         strokeWidth={1.8}
-        className="transition-transform group-hover:translate-x-1"
+        className="transition-transform duration-300 ease-out group-hover:translate-x-1"
       />
     </>
   );

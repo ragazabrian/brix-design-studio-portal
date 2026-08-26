@@ -105,10 +105,9 @@ function SettingsPage() {
   }
 
   async function setNotifyPreference(key: "notify_in_app" | "notify_email", value: boolean) {
-    const { error } = await supabase
-      .from("profiles")
-      .update({ [key]: value })
-      .eq("id", user!.id);
+    const patch =
+      key === "notify_in_app" ? { notify_in_app: value } : { notify_email: value };
+    const { error } = await supabase.from("profiles").update(patch).eq("id", user!.id);
     if (error) {
       toast.error("That preference was not saved.");
       return;

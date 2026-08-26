@@ -8,7 +8,9 @@ import { FileGrid } from "@/components/portal/FileGrid";
 import { PillButton } from "@/components/site/Primitives";
 import { supabase } from "@/integrations/supabase/client";
 import {
+  useActivity,
   useIntegrations,
+  notify,
   useProfile,
   useProjects,
   useRoles,
@@ -44,6 +46,8 @@ function DashboardPage() {
   const { data: roles } = useRoles(user?.id);
   const { data: projects, isPending: projectsPending } = useProjects();
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
+  const term = query.trim().toLowerCase();
 
   const role: AppRole | undefined = roles?.includes("admin")
     ? "admin"
@@ -58,6 +62,18 @@ function DashboardPage() {
   useEffect(() => {
     if (!activeId && projects && projects.length > 0) setActiveId(projects[0]!.id);
   }, [projects, activeId]);
+
+  const visibleProjects = useMemo(
+    () =>
+      (projects ?? []).filter(
+        (project) =>
+          term.length === 0 ||
+          project.name.toLowerCase().includes(term) ||
+          (project.client_name ?? "").toLowerCase().includes(term) ||
+          (project.status ?? "").toLowerCase().includes(term),
+      ),
+    [projects, term],
+  );
 
   const activeProject = useMemo(
     () => projects?.find((project) => project.id === activeId) ?? null,
@@ -76,6 +92,27 @@ function DashboardPage() {
       profileName={profile?.full_name}
       avatarUrl={profile?.avatar_url}
     >
+      <form
+        role="search"
+        onSubmit={(event) => event.preventDefault()}
+        className="mb-10 max-w-xl"
+      >
+        <label htmlFor="portal-search" className="label-caps mb-2 block text-muted-foreground">
+          Search the portal
+        </label>
+        <input
+          id="portal-search"
+          type="search"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Projects, tasks, hours or files"
+          className="w-full rounded-3xl border border-input bg-paper px-5 py-3 text-[15px] placeholder:text-muted-foreground"
+        />
+        <p className="mt-2 text-caption text-muted-foreground">
+          Filters the project list and everything shown for the selected project.
+        </p>
+      </form>
+
       <div className="grid gap-10 lg:grid-cols-[minmax(0,260px)_minmax(0,1fr)] lg:gap-12">
         <aside>
           <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
@@ -85,9 +122,9 @@ function DashboardPage() {
 
           {projectsPending ? (
             <p className="mt-4 text-muted-foreground">Loading projects.</p>
-          ) : projects && projects.length > 0 ? (
+          ) : visibleProjects.length > 0 ? (
             <ul className="mt-4 space-y-2">
-              {projects.map((project) => (
+              {visibleProjects.map((project) => (
                 <li key={project.id}>
                   <button
                     type="button"
@@ -111,8 +148,11 @@ function DashboardPage() {
             </ul>
           ) : (
             <p className="mt-4 rounded-3xl bg-frost p-5 text-muted-foreground">
-              No projects yet.{" "}
-              {isStaff ? "Create one to start adding files." : "We will add yours shortly."}
+              {term.length > 0
+                ? "No projects match that search."
+                : isStaff
+                  ? "No projects yet. Create one to start adding files."
+                  : "No projects yet. We will add yours shortly."}
             </p>
           )}
 
@@ -148,9 +188,20 @@ function DashboardPage() {
                 </dl>
               </section>
 
-              <FileGrid projectId={activeProject.id} canUpload={Boolean(user)} userId={user!.id} />
-              <Tasks projectId={activeProject.id} canEdit={isStaff} />
-              <Hours projectId={activeProject.id} canLog={isStaff} userId={user!.id} />
+              <FileGrid
+                projectId={activeProject.id}
+                canUpload={Boolean(user)}
+                userId={user!.id}
+                query={query}
+              />
+              <Tasks projectId={activeProject.id} canEdit={isStaff} query={query} />
+              <Hours
+                projectId={activeProject.id}
+                canLog={isStaff}
+                userId={user!.id}
+                query={query}
+              />
+              <ActivityLog projectId={activeProject.id} />
             </>
           ) : (
             <p className="rounded-3xl bg-frost p-6 text-muted-foreground">
@@ -283,8 +334,17 @@ function NewProjectButton({
   );
 }
 
-function Tasks({ projectId, canEdit }: { projectId: string; canEdit: boolean }) {
+function Tasks({
+  projectId,
+  canEdit,
+  query,
+}: {
+  projectId: string;
+  canEdit: boolean;
+  query: string;
+}) {
   const { data: tasks } = useTasks(projectId);
+  const term = query.trim().toLowerCase();
   const queryClient = useQueryClient();
 
   async function addTask() {
@@ -312,6 +372,13 @@ function Tasks({ projectId, canEdit }: { projectId: string; canEdit: boolean }) 
     await queryClient.invalidateQueries({ queryKey: ["tasks", projectId] });
   }
 
+  const visibleTasks = (tasks ?? []).filter(
+    (task) =>
+      term.length === 0 ||
+      task.title.toLowerCase().includes(term) ||
+      (task.description ?? "").toLowerCase().includes(term),
+  );
+
   const labels: Record<string, string> = {
     todo: "To do",
     in_progress: "In progress",
@@ -336,9 +403,9 @@ function Tasks({ projectId, canEdit }: { projectId: string; canEdit: boolean }) 
         ) : null}
       </div>
 
-      {tasks && tasks.length > 0 ? (
+      {visibleTasks.length > 0 ? (
         <ul className="mt-6 divide-y divide-border rounded-3xl border border-border">
-          {tasks.map((task) => (
+          {visibleTasks.map((task) => (
             <li key={task.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 p-4">
               <div className="min-w-0">
                 <p className="truncate text-[15px] font-medium">{task.title}</p>
@@ -361,7 +428,7 @@ function Tasks({ projectId, canEdit }: { projectId: string; canEdit: boolean }) 
         </ul>
       ) : (
         <p className="mt-6 rounded-3xl bg-frost p-6 text-muted-foreground">
-          Nothing on the board yet.
+          {term.length > 0 ? "No tasks match that search." : "Nothing on the board yet."}
         </p>
       )}
     </section>
@@ -372,13 +439,22 @@ function Hours({
   projectId,
   canLog,
   userId,
+  query,
 }: {
   projectId: string;
   canLog: boolean;
   userId: string;
+  query: string;
 }) {
   const { data: entries } = useTimeEntries(projectId);
   const queryClient = useQueryClient();
+  const term = query.trim().toLowerCase();
+  const visibleEntries = (entries ?? []).filter(
+    (entry) =>
+      term.length === 0 ||
+      (entry.description ?? "").toLowerCase().includes(term) ||
+      entry.entry_date.includes(term),
+  );
   const total = (entries ?? []).reduce((sum, entry) => sum + entry.minutes, 0);
 
   async function logTime() {
@@ -425,9 +501,9 @@ function Hours({
         {(total / 60).toFixed(1)} hours logged on this project.
       </p>
 
-      {entries && entries.length > 0 ? (
+      {visibleEntries.length > 0 ? (
         <ul className="mt-6 divide-y divide-border rounded-3xl border border-border">
-          {entries.map((entry) => (
+          {visibleEntries.map((entry) => (
             <li key={entry.id} className="grid grid-cols-[minmax(0,1fr)_auto] gap-4 p-4">
               <span className="min-w-0">
                 <span className="block truncate text-[15px]">
@@ -478,9 +554,21 @@ function Integrations() {
       });
       if (error) {
         toast.error("That connection was not requested.");
+        await notify(
+          user!.id,
+          "Connection request failed",
+          "Please try again in a moment.",
+          "error",
+        );
         return;
       }
-      toast.success("Request noted. We will finish the connection with you.");
+      toast.success("Request sent. We will finish the connection with you.");
+      await notify(
+        user!.id,
+        `${provider.replace("_", " ")} connection requested`,
+        "We will confirm here once the connection is live.",
+        "info",
+      );
     }
     await queryClient.invalidateQueries({ queryKey: ["integrations"] });
   }
@@ -515,6 +603,34 @@ function Integrations() {
           );
         })}
       </ul>
+    </section>
+  );
+}
+
+function ActivityLog({ projectId }: { projectId: string }) {
+  const { data: entries } = useActivity(projectId);
+
+  return (
+    <section aria-labelledby="activity-heading">
+      <h2 id="activity-heading" className="text-[20px] font-medium">
+        Activity
+      </h2>
+      {entries && entries.length > 0 ? (
+        <ol className="mt-6 divide-y divide-border rounded-3xl border border-border">
+          {entries.map((entry) => (
+            <li key={entry.id} className="grid gap-1 p-4">
+              <span className="text-[15px]">{entry.summary}</span>
+              <span className="text-caption text-muted-foreground tabular-nums">
+                {new Date(entry.created_at).toLocaleString()}
+              </span>
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <p className="mt-6 rounded-3xl bg-frost p-6 text-muted-foreground">
+          Uploads, file updates and restores will be listed here.
+        </p>
+      )}
     </section>
   );
 }

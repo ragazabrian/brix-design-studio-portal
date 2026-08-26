@@ -172,10 +172,10 @@ function PortalAuthPage() {
           </div>
 
 
-          <form onSubmit={onSubmit} className="space-y-4">
+          <form onSubmit={onSubmit} className="space-y-3">
             {!signingIn ? (
               <div>
-                <label htmlFor="full_name" className="label-caps mb-2 block text-paper/60">
+                <label htmlFor="full_name" className="label-caps mb-1.5 block text-paper/55">
                   Full name
                 </label>
                 <input
@@ -189,7 +189,7 @@ function PortalAuthPage() {
               </div>
             ) : null}
             <div>
-              <label htmlFor="email" className="label-caps mb-2 block text-paper/60">
+              <label htmlFor="email" className="label-caps mb-1.5 block text-paper/55">
                 Email
               </label>
               <input
@@ -203,7 +203,7 @@ function PortalAuthPage() {
               />
             </div>
             <div>
-              <label htmlFor="password" className="label-caps mb-2 block text-paper/60">
+              <label htmlFor="password" className="label-caps mb-1.5 block text-paper/55">
                 Password
               </label>
               <input
@@ -220,17 +220,17 @@ function PortalAuthPage() {
             <button
               type="submit"
               disabled={busy}
-              className="inline-flex w-full items-center justify-center rounded-2xl bg-brand px-5 py-3.5 text-[15px] font-medium text-paper transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-deep disabled:translate-y-0 disabled:opacity-60"
+              className="mt-1 inline-flex w-full items-center justify-center rounded-xl bg-brand px-5 py-3 text-[15px] font-medium text-paper transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-deep disabled:translate-y-0 disabled:opacity-60"
             >
               {busy ? "One moment" : signingIn ? "Sign in" : "Create account"}
             </button>
           </form>
 
-          <p className="mt-6 text-center text-caption text-paper/45">
+          <p className="mt-4 text-center text-caption text-paper/40">
             By continuing you agree to how we handle your project data, set out in our terms.
           </p>
 
-          <p className="mt-8 text-center text-[15px] text-paper/60">
+          <p className="mt-5 text-center text-sm text-paper/60">
             {signingIn ? "No account yet? " : "Already have an account? "}
             <button
               type="button"
@@ -240,6 +240,7 @@ function PortalAuthPage() {
               {signingIn ? "Create one" : "Sign in instead"}
             </button>
           </p>
+
         </motion.div>
       </div>
 

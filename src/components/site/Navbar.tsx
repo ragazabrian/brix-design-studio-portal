@@ -3,7 +3,9 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { Menu01Icon } from "@hugeicons/core-free-icons";
 import { useEffect, useState } from "react";
 
-import { navLinks, studio } from "@/data/site";
+import { studio } from "@/data/site";
+import wordmarkLight from "@/assets/brix-wordmark-light.svg.asset.json";
+import wordmarkDark from "@/assets/brix-wordmark-dark.svg.asset.json";
 import { FullScreenMenu } from "@/components/site/FullScreenMenu";
 import { cn } from "@/lib/utils";
 

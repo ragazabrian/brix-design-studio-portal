@@ -102,7 +102,7 @@ export function FullScreenMenu({ open, onClose }: { open: boolean; onClose: () =
                   >
                     {link.label}
                     {link.badge ? (
-                      <span className="label-caps rounded-full bg-lime px-2.5 py-1 text-[11px] text-ink">
+                      <span className="label-caps rounded-full bg-brand px-2.5 py-1 text-[11px] text-paper">
                         {link.badge}
                       </span>
                     ) : null}

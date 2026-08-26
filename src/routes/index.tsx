@@ -51,12 +51,11 @@ function Home() {
             {studio.name}, a brand and design practice working in print, product and place.
           </p>
           <h1 className="display-serif mt-6 max-w-4xl text-[clamp(2.5rem,7.5vw,5.5rem)] text-paper">
-            We build brands that
-            <br />
-            hold their shape
-            <br />
-            long after launch.
+            <RevealLines
+              lines={["We build brands that", "hold their shape", "long after launch."]}
+            />
           </h1>
+
           <p className="mt-7 max-w-xl text-paper/75 md:text-[17px]">
             One system for identity, packaging, editorial and product. Drawn to be used by your team
             every day, not just admired in a deck.

@@ -169,3 +169,108 @@ export function useIntegrations() {
     },
   });
 }
+
+export function useNotifications(userId: string | undefined) {
+  return useQuery({
+    queryKey: ["notifications", userId],
+    enabled: Boolean(userId),
+    refetchInterval: 30000,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("notifications")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(30);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+}
+
+export function useActivity(projectId: string | undefined) {
+  return useQuery({
+    queryKey: ["activity", projectId],
+    enabled: Boolean(projectId),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("activity_log")
+        .select("*")
+        .eq("project_id", projectId!)
+        .order("created_at", { ascending: false })
+        .limit(50);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+}
+
+export function useFileVersions(fileId: string | undefined) {
+  return useQuery({
+    queryKey: ["file-versions", fileId],
+    enabled: Boolean(fileId),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("file_versions")
+        .select("*")
+        .eq("file_id", fileId!)
+        .order("version", { ascending: false });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+}
+
+export function useTeam(enabled: boolean) {
+  return useQuery({
+    queryKey: ["team"],
+    enabled,
+    queryFn: async () => {
+      const [{ data: profiles, error }, { data: roleRows, error: roleError }] = await Promise.all([
+        supabase.from("profiles").select("*").order("created_at", { ascending: false }),
+        supabase.from("user_roles").select("user_id, role"),
+      ]);
+      if (error) throw error;
+      if (roleError) throw roleError;
+      return (profiles ?? []).map((profile) => ({
+        ...profile,
+        roles: (roleRows ?? [])
+          .filter((row) => row.user_id === profile.id)
+          .map((row) => row.role as AppRole),
+      }));
+    },
+  });
+}
+
+export function useInvitations(enabled: boolean) {
+  return useQuery({
+    queryKey: ["invitations"],
+    enabled,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("invitations")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+}
+
+/** Records a portal event so the activity log shows who did what and when. */
+export async function logActivity(projectId: string | null, actorId: string, summary: string) {
+  await supabase.from("activity_log").insert({
+    project_id: projectId,
+    actor_id: actorId,
+    summary,
+  });
+}
+
+/** Sends an in-app notification to a person in the portal. */
+export async function notify(
+  userId: string,
+  title: string,
+  body: string | null,
+  kind: "info" | "success" | "error" = "info",
+) {
+  await supabase.from("notifications").insert({ user_id: userId, title, body, kind });
+}

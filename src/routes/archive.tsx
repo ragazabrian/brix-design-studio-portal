@@ -1,8 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { projects } from "@/data/site";
 import { PageHeader, SiteShell } from "@/components/site/SiteShell";
-import { ArrowLink, Reveal } from "@/components/site/Primitives";
+import { Reveal } from "@/components/site/Primitives";
 
 export const Route = createFileRoute("/archive")({
   head: () => ({
@@ -67,9 +67,14 @@ function ArchivePage() {
                   {project.scope.join(", ")}
                 </td>
                 <td className="py-5 text-right">
-                  <ArrowLink to="/work/$slug" params={{ slug: project.slug }}>
+                  <Link
+                    to="/work/$slug"
+                    params={{ slug: project.slug }}
+                    className="inline-flex items-center gap-2 text-[15px] font-medium underline-offset-4 hover:underline"
+                  >
                     Read
-                  </ArrowLink>
+                    <span aria-hidden>&rarr;</span>
+                  </Link>
                 </td>
               </tr>
             ))}

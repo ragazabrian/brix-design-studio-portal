@@ -179,7 +179,7 @@ export const projects: Project[] = [
     summary:
       "A law practice identity that reads as careful rather than conservative.",
     scope: ["Identity", "Stationery", "Web"],
-    image: work2,
+    image: work7,
     body: [
       "Legal branding tends to reach for navy and columns. Rede wanted precision without the costume.",
       "We paired a quiet serif with generous margins and one restrained accent, then applied it across letterheads, contracts and the site.",
@@ -194,7 +194,7 @@ export const projects: Project[] = [
     summary:
       "An investment brand plus the annual report a shareholder can actually navigate.",
     scope: ["Brand", "Editorial", "Data design"],
-    image: work3,
+    image: work8,
     body: [
       "Numbers were correct and impossible to find. Every chart had its own style.",
       "We standardised the chart set, fixed a four column grid and put a figure index on page three. The report now takes minutes to read, not an afternoon.",
@@ -209,7 +209,7 @@ export const projects: Project[] = [
     summary:
       "A retail campaign system built so the in-house team can run it season after season.",
     scope: ["Art direction", "Campaign", "Templates"],
-    image: work1,
+    image: work9,
     body: [
       "Each drop was being designed from nothing, which cost time and made the brand hard to recognise.",
       "We set a shooting spec, a type lockup and a template pack. The team now produces a full seasonal set without briefing us in.",
@@ -224,7 +224,7 @@ export const projects: Project[] = [
     summary:
       "A product site where motion carries the explanation instead of decorating it.",
     scope: ["Web design", "Motion", "Copy structure"],
-    image: work4,
+    image: work10,
     body: [
       "The product was easy to use and hard to describe in text.",
       "We replaced three paragraphs with short looping demonstrations, each tied to one sentence. Time on the page went up and support questions went down.",

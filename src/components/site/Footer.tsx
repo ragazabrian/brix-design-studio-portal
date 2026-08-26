@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   InstagramIcon,
-  FacebookIcon,
+  Facebook02Icon,
   Linkedin01Icon,
 } from "@hugeicons/core-free-icons";
 
@@ -10,7 +10,7 @@ import { menuLinks, studio } from "@/data/site";
 
 const socialIcons: Record<string, typeof InstagramIcon> = {
   Instagram: InstagramIcon,
-  Facebook: FacebookIcon,
+  Facebook: Facebook02Icon,
   LinkedIn: Linkedin01Icon,
 };
 

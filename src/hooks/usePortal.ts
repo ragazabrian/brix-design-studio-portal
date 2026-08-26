@@ -152,7 +152,7 @@ export function useTimeEntries(projectId: string | undefined) {
         .from("time_entries")
         .select("*")
         .eq("project_id", projectId!)
-        .order("spent_on", { ascending: false });
+        .order("entry_date", { ascending: false });
       if (error) throw error;
       return data ?? [];
     },

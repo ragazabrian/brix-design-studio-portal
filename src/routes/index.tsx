@@ -71,7 +71,7 @@ function Home() {
         </div>
       </section>
 
-      <section className="page-shell py-16 md:py-24">
+      <section className="page-shell py-24 md:py-32">
         <SectionIntro label="Work" showScrollHint />
 
         <div className="grid gap-5 md:grid-cols-2 md:gap-6">
@@ -86,7 +86,7 @@ function Home() {
 
           <SpotlightBlock spotlight={spotlights[0]!} />
 
-          {projects.slice(3).map((project) => (
+          {projects.slice(3, 6).map((project) => (
             <Reveal
               key={project.slug}
               className={project.span === "wide" ? "md:col-span-2" : undefined}
@@ -96,9 +96,18 @@ function Home() {
           ))}
 
           <SpotlightBlock spotlight={spotlights[1]!} />
+
+          {projects.slice(6).map((project) => (
+            <Reveal
+              key={project.slug}
+              className={project.span === "wide" ? "md:col-span-2" : undefined}
+            >
+              <WorkCard project={project} />
+            </Reveal>
+          ))}
         </div>
 
-        <div className="mt-12 flex justify-center">
+        <div className="mt-14 flex justify-center">
           <PillLink to="/work" variant="outline">
             View all projects
           </PillLink>
@@ -107,17 +116,18 @@ function Home() {
 
       <LogoMarquee />
 
-      <section className="page-shell py-16 md:py-24">
+      <section className="page-shell py-24 md:py-32">
         <SectionIntro label="News" showScrollHint />
         <div>
           {news.map((item) => (
             <NewsAccordionItem key={item.id} item={item} />
           ))}
         </div>
-        <div className="mt-10">
+        <div className="mt-12">
           <ArrowLink to="/news">Read more news</ArrowLink>
         </div>
       </section>
+
 
       <CTABanner
         image={ctaImage}

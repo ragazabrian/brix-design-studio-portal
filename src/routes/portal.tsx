@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowLeft01Icon, GoogleIcon } from "@hugeicons/core-free-icons";
+import { ArrowLeft01Icon } from "@hugeicons/core-free-icons";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { motion, useReducedMotion } from "motion/react";

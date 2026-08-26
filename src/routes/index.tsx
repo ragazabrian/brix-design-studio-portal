@@ -5,7 +5,7 @@ import ctaImage from "@/assets/cta-collaborate.jpg";
 import socialTile from "@/assets/social-tile.jpg";
 import { news, projects, spotlights, studio } from "@/data/site";
 import { SiteShell } from "@/components/site/SiteShell";
-import { ArrowLink, PillLink, Reveal, SectionIntro } from "@/components/site/Primitives";
+import { ArrowLink, PillLink, Reveal, RevealLines, SectionIntro } from "@/components/site/Primitives";
 import { WorkCard } from "@/components/site/WorkCard";
 import { SpotlightBlock } from "@/components/site/SpotlightBlock";
 import { LogoMarquee } from "@/components/site/LogoMarquee";

@@ -75,7 +75,7 @@ function PortalAuthPage() {
   async function onGoogle() {
     setBusy(true);
     const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
+      redirect_uri: `${window.location.origin}/portal`,
     });
     if (result.error) {
       setBusy(false);

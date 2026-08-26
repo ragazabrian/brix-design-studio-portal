@@ -124,12 +124,12 @@ function PortalAuthPage() {
   const signingIn = mode === "signin";
 
   return (
-    <main className="min-h-svh bg-obsidian text-paper lg:grid lg:min-h-svh lg:grid-cols-2">
+    <main className="h-svh overflow-hidden bg-obsidian text-paper lg:grid lg:grid-cols-2">
       {/* Form side */}
-      <div className="relative flex min-h-svh flex-col px-5 py-8 sm:px-10 lg:min-h-0 lg:px-14 xl:px-20">
-        <div className="flex items-center justify-between">
+      <div className="relative flex h-svh flex-col overflow-y-auto px-5 py-6 sm:px-10 lg:h-full lg:px-14 xl:px-20">
+        <div className="flex shrink-0 items-center justify-between">
           <Link to="/" className="inline-flex items-center gap-3" aria-label="Brix Design Studio home">
-            <img src={wordmarkDark.url} alt="Brix Design Studio" className="h-5 w-auto" />
+            <img src={wordmarkDark.url} alt="Brix Design Studio" className="h-4 w-auto" />
           </Link>
           <Link
             to="/"
@@ -144,12 +144,12 @@ function PortalAuthPage() {
           initial={reduce ? false : { opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="mx-auto flex w-full max-w-[420px] flex-1 flex-col justify-center py-12"
+          className="mx-auto flex w-full max-w-[400px] flex-1 flex-col justify-center py-8"
         >
-          <h1 className="display-serif text-center text-[clamp(1.75rem,4.5vw,2.5rem)]">
+          <h1 className="display-serif text-center text-[clamp(1.5rem,3.4vw,2.125rem)] leading-tight">
             {signingIn ? "Welcome back to Brix" : "Create your Brix account"}
           </h1>
-          <p className="mx-auto mt-4 max-w-[34ch] text-center text-[15px] text-paper/60">
+          <p className="mx-auto mt-3 max-w-[34ch] text-center text-sm text-paper/55">
             {signingIn
               ? "Sign in to reach your files, guidelines, tasks and logged hours."
               : "Use your work email so we can match you to the right projects."}
@@ -159,17 +159,18 @@ function PortalAuthPage() {
             type="button"
             onClick={onGoogle}
             disabled={busy}
-            className="mt-9 inline-flex w-full items-center justify-center gap-3 rounded-2xl bg-paper px-5 py-3.5 text-[15px] font-medium text-obsidian transition-all duration-300 hover:-translate-y-0.5 hover:bg-paper/90 disabled:translate-y-0 disabled:opacity-60"
+            className="mt-7 inline-flex w-full items-center justify-center gap-3 rounded-xl bg-paper px-5 py-3 text-[15px] font-medium text-obsidian transition-all duration-300 hover:-translate-y-0.5 hover:bg-paper/90 disabled:translate-y-0 disabled:opacity-60"
           >
-            <HugeiconsIcon icon={GoogleIcon} size={20} strokeWidth={1.6} aria-hidden />
+            <GoogleMark />
             Continue with Google
           </button>
 
-          <div className="my-7 flex items-center gap-4 text-paper/40">
-            <span className="h-px flex-1 bg-paper/15" />
+          <div className="my-5 flex items-center gap-4 text-paper/40">
+            <span className="h-px flex-1 bg-paper/12" />
             <span className="text-caption">or use your email</span>
-            <span className="h-px flex-1 bg-paper/15" />
+            <span className="h-px flex-1 bg-paper/12" />
           </div>
+
 
           <form onSubmit={onSubmit} className="space-y-4">
             {!signingIn ? (

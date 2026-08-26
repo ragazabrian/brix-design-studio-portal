@@ -118,8 +118,8 @@ function PortalAuthPage() {
         </div>
 
         <motion.div
-          initial={reduce ? undefined : { opacity: 0, y: 18 }}
-          animate={reduce ? undefined : { opacity: 1, y: 0 }}
+          initial={reduce ? false : { opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className="mx-auto flex w-full max-w-[420px] flex-1 flex-col justify-center py-12"
         >

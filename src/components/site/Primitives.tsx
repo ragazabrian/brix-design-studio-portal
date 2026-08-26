@@ -71,8 +71,8 @@ export function RevealLines({
         <span key={line} className="block overflow-hidden">
           <motion.span
             className="block"
-            initial={reduce ? undefined : { y: "110%" }}
-            animate={reduce ? undefined : { y: 0 }}
+            initial={reduce ? false : { y: "110%" }}
+            animate={reduce ? { y: 0 } : { y: 0 }}
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: delay + index * 0.1 }}
           >
             {line}

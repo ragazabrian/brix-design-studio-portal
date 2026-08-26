@@ -38,7 +38,7 @@ export const Route = createFileRoute("/")({
 function Home() {
   return (
     <SiteShell overHero>
-      <section className="relative min-h-[92svh] overflow-hidden bg-ink">
+      <section className="relative min-h-[100svh] overflow-hidden bg-ink">
         <img
           src={heroImage}
           alt="A design studio workspace with printed brand books spread across a long table"
@@ -46,7 +46,7 @@ function Home() {
           height={1080}
           className="grayscale-media absolute inset-0 h-full w-full object-cover opacity-55"
         />
-        <div className="page-shell relative flex min-h-[92svh] flex-col justify-end pb-16 pt-28 md:pb-24">
+        <div className="page-shell relative flex min-h-[100svh] flex-col justify-end pb-16 pt-28 md:pb-24">
           <p className="label-caps max-w-md text-paper/70">
             {studio.name}, a brand and design practice working in print, product and place.
           </p>

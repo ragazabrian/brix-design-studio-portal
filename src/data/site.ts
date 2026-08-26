@@ -71,6 +71,10 @@ import work3 from "@/assets/work-3.jpg";
 import work4 from "@/assets/work-4.jpg";
 import work5 from "@/assets/work-5.jpg";
 import work6 from "@/assets/work-6.jpg";
+import work7 from "@/assets/work-7.jpg";
+import work8 from "@/assets/work-8.jpg";
+import work9 from "@/assets/work-9.jpg";
+import work10 from "@/assets/work-10.jpg";
 import spotlightA from "@/assets/spotlight-1.jpg";
 import spotlightB from "@/assets/spotlight-2.jpg";
 

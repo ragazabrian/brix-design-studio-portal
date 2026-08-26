@@ -176,7 +176,12 @@ export function PortalShell({
                 alt={profileName ? `Profile photo of ${profileName}` : "Your profile photo"}
                 width={36}
                 height={36}
-                className="h-9 w-9 shrink-0 rounded-full object-cover"
+                referrerPolicy="no-referrer"
+                loading="lazy"
+                onError={(event) => {
+                  event.currentTarget.style.display = "none";
+                }}
+                className="h-9 w-9 shrink-0 rounded-full bg-frost object-cover"
               />
             ) : null}
             <button

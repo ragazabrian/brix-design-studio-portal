@@ -37,39 +37,15 @@ export function Navbar({ overHero = false }: { overHero?: boolean }) {
         )}
       >
         <div className="page-shell flex h-16 items-center justify-between gap-4 md:h-20">
-          <Link
-            to="/"
-            className={cn(
-              "font-display text-xl tracking-tight transition-colors md:text-2xl",
-              transparent ? "text-paper" : "text-ink",
-            )}
-          >
-            {studio.shortName}
+          <Link to="/" aria-label={`${studio.shortName} home`} className="flex items-center">
+            <img
+              src={transparent ? wordmarkDark.url : wordmarkLight.url}
+              alt={`${studio.shortName} wordmark`}
+              width={1939}
+              height={573}
+              className="h-6 w-auto md:h-7"
+            />
           </Link>
-
-          <nav aria-label="Primary" className="hidden lg:block">
-            <ul className="flex items-center gap-7">
-              {navLinks.map((link) => (
-                <li key={link.to}>
-                  <Link
-                    to={link.to}
-                    activeProps={{ className: "underline" }}
-                    className={cn(
-                      "inline-flex items-center gap-2 text-[15px] underline-offset-4 hover:underline",
-                      transparent ? "text-paper" : "text-ink",
-                    )}
-                  >
-                    {link.label}
-                    {link.badge ? (
-                      <span className="label-caps rounded-full bg-lime px-2 py-0.5 text-[10px] text-ink">
-                        {link.badge}
-                      </span>
-                    ) : null}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
 
           <div className="flex items-center gap-2">
             <Link
@@ -83,6 +59,7 @@ export function Navbar({ overHero = false }: { overHero?: boolean }) {
             >
               Log in
             </Link>
+
             <button
               type="button"
               onClick={() => setMenuOpen(true)}

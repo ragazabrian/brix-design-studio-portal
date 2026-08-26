@@ -31,7 +31,30 @@ export const Route = createFileRoute("/portal")({
 });
 
 const inputClass =
-  "w-full rounded-2xl border border-paper/15 bg-paper/[0.06] px-5 py-3.5 text-[15px] text-paper transition-colors placeholder:text-paper/40 hover:border-paper/25 focus-visible:border-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/60";
+  "w-full rounded-xl border border-paper/12 bg-paper/[0.05] px-4 py-3 text-[15px] text-paper transition-colors placeholder:text-paper/35 hover:border-paper/20 focus-visible:border-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/60";
+
+function GoogleMark() {
+  return (
+    <svg viewBox="0 0 48 48" width="18" height="18" aria-hidden focusable="false">
+      <path
+        fill="#EA4335"
+        d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.7-6.7C35.6 2.5 30.2 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.8 6.1C12.3 13.4 17.6 9.5 24 9.5Z"
+      />
+      <path
+        fill="#4285F4"
+        d="M46.5 24.5c0-1.6-.15-3.2-.45-4.7H24v9.1h12.6c-.55 2.9-2.2 5.4-4.7 7.1l7.6 5.9c4.4-4.1 7-10.1 7-17.4Z"
+      />
+      <path
+        fill="#FBBC05"
+        d="M10.4 28.7a14.6 14.6 0 0 1 0-9.4l-7.8-6.1a24 24 0 0 0 0 21.6l7.8-6.1Z"
+      />
+      <path
+        fill="#34A853"
+        d="M24 48c6.5 0 11.9-2.1 15.5-5.8l-7.6-5.9c-2.1 1.4-4.8 2.2-7.9 2.2-6.4 0-11.7-3.9-13.6-9.8l-7.8 6.1C6.5 42.6 14.6 48 24 48Z"
+      />
+    </svg>
+  );
+}
 
 function PortalAuthPage() {
   const navigate = useNavigate();

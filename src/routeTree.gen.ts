@@ -10,7 +10,10 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as ArchiveRouteImport } from './routes/archive'
+import { Route as ClientPortalRouteImport } from './routes/client-portal'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as NewsRouteImport } from './routes/news'
 import { Route as WorkRouteImport } from './routes/work'
 import { Route as WorkIndexRouteImport } from './routes/work.index'
@@ -21,9 +24,24 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ArchiveRoute = ArchiveRouteImport.update({
   id: '/archive',
   path: '/archive',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientPortalRoute = ClientPortalRouteImport.update({
+  id: '/client-portal',
+  path: '/client-portal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NewsRoute = NewsRouteImport.update({
@@ -49,7 +67,10 @@ const WorkSlugRoute = WorkSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/archive': typeof ArchiveRoute
+  '/client-portal': typeof ClientPortalRoute
+  '/contact': typeof ContactRoute
   '/news': typeof NewsRoute
   '/work': typeof WorkRouteWithChildren
   '/work/$slug': typeof WorkSlugRoute
@@ -57,7 +78,10 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/archive': typeof ArchiveRoute
+  '/client-portal': typeof ClientPortalRoute
+  '/contact': typeof ContactRoute
   '/news': typeof NewsRoute
   '/work/$slug': typeof WorkSlugRoute
   '/work': typeof WorkIndexRoute
@@ -65,7 +89,10 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/archive': typeof ArchiveRoute
+  '/client-portal': typeof ClientPortalRoute
+  '/contact': typeof ContactRoute
   '/news': typeof NewsRoute
   '/work': typeof WorkRouteWithChildren
   '/work/$slug': typeof WorkSlugRoute
@@ -73,16 +100,45 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/archive' | '/news' | '/work' | '/work/$slug' | '/work/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/archive'
+    | '/client-portal'
+    | '/contact'
+    | '/news'
+    | '/work'
+    | '/work/$slug'
+    | '/work/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/archive' | '/news' | '/work/$slug' | '/work'
+  to:
+    | '/'
+    | '/about'
+    | '/archive'
+    | '/client-portal'
+    | '/contact'
+    | '/news'
+    | '/work/$slug'
+    | '/work'
   id:
-    '__root__' | '/' | '/archive' | '/news' | '/work' | '/work/$slug' | '/work/'
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/archive'
+    | '/client-portal'
+    | '/contact'
+    | '/news'
+    | '/work'
+    | '/work/$slug'
+    | '/work/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   ArchiveRoute: typeof ArchiveRoute
+  ClientPortalRoute: typeof ClientPortalRoute
+  ContactRoute: typeof ContactRoute
   NewsRoute: typeof NewsRoute
   WorkRoute: typeof WorkRouteWithChildren
 }
@@ -96,11 +152,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/archive': {
       id: '/archive'
       path: '/archive'
       fullPath: '/archive'
       preLoaderRoute: typeof ArchiveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/client-portal': {
+      id: '/client-portal'
+      path: '/client-portal'
+      fullPath: '/client-portal'
+      preLoaderRoute: typeof ClientPortalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/news': {
@@ -148,7 +225,10 @@ const WorkRouteWithChildren = WorkRoute._addFileChildren(WorkRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   ArchiveRoute: ArchiveRoute,
+  ClientPortalRoute: ClientPortalRoute,
+  ContactRoute: ContactRoute,
   NewsRoute: NewsRoute,
   WorkRoute: WorkRouteWithChildren,
 }

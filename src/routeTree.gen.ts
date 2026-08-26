@@ -15,6 +15,7 @@ import { Route as ArchiveRouteImport } from './routes/archive'
 import { Route as ClientPortalRouteImport } from './routes/client-portal'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as NewsRouteImport } from './routes/news'
+import { Route as PortalRouteImport } from './routes/portal'
 import { Route as WorkRouteImport } from './routes/work'
 import { Route as WorkIndexRouteImport } from './routes/work.index'
 import { Route as WorkSlugRouteImport } from './routes/work.$slug'
@@ -49,6 +50,11 @@ const NewsRoute = NewsRouteImport.update({
   path: '/news',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PortalRoute = PortalRouteImport.update({
+  id: '/portal',
+  path: '/portal',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WorkRoute = WorkRouteImport.update({
   id: '/work',
   path: '/work',
@@ -72,6 +78,7 @@ export interface FileRoutesByFullPath {
   '/client-portal': typeof ClientPortalRoute
   '/contact': typeof ContactRoute
   '/news': typeof NewsRoute
+  '/portal': typeof PortalRoute
   '/work': typeof WorkRouteWithChildren
   '/work/$slug': typeof WorkSlugRoute
   '/work/': typeof WorkIndexRoute
@@ -83,6 +90,7 @@ export interface FileRoutesByTo {
   '/client-portal': typeof ClientPortalRoute
   '/contact': typeof ContactRoute
   '/news': typeof NewsRoute
+  '/portal': typeof PortalRoute
   '/work/$slug': typeof WorkSlugRoute
   '/work': typeof WorkIndexRoute
 }
@@ -94,6 +102,7 @@ export interface FileRoutesById {
   '/client-portal': typeof ClientPortalRoute
   '/contact': typeof ContactRoute
   '/news': typeof NewsRoute
+  '/portal': typeof PortalRoute
   '/work': typeof WorkRouteWithChildren
   '/work/$slug': typeof WorkSlugRoute
   '/work/': typeof WorkIndexRoute
@@ -107,6 +116,7 @@ export interface FileRouteTypes {
     | '/client-portal'
     | '/contact'
     | '/news'
+    | '/portal'
     | '/work'
     | '/work/$slug'
     | '/work/'
@@ -118,6 +128,7 @@ export interface FileRouteTypes {
     | '/client-portal'
     | '/contact'
     | '/news'
+    | '/portal'
     | '/work/$slug'
     | '/work'
   id:
@@ -128,6 +139,7 @@ export interface FileRouteTypes {
     | '/client-portal'
     | '/contact'
     | '/news'
+    | '/portal'
     | '/work'
     | '/work/$slug'
     | '/work/'
@@ -140,6 +152,7 @@ export interface RootRouteChildren {
   ClientPortalRoute: typeof ClientPortalRoute
   ContactRoute: typeof ContactRoute
   NewsRoute: typeof NewsRoute
+  PortalRoute: typeof PortalRoute
   WorkRoute: typeof WorkRouteWithChildren
 }
 
@@ -187,6 +200,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NewsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/portal': {
+      id: '/portal'
+      path: '/portal'
+      fullPath: '/portal'
+      preLoaderRoute: typeof PortalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/work': {
       id: '/work'
       path: '/work'
@@ -230,6 +250,7 @@ const rootRouteChildren: RootRouteChildren = {
   ClientPortalRoute: ClientPortalRoute,
   ContactRoute: ContactRoute,
   NewsRoute: NewsRoute,
+  PortalRoute: PortalRoute,
   WorkRoute: WorkRouteWithChildren,
 }
 export const routeTree = rootRouteImport

@@ -91,8 +91,8 @@ export function ArrowLink({
   children,
   className,
 }: {
-  to?: string;
-  href?: string;
+  to?: string | undefined;
+  href?: string | undefined;
   children: ReactNode;
   className?: string;
 }) {

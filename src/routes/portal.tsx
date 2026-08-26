@@ -7,7 +7,7 @@ import { motion, useReducedMotion } from "motion/react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
-import wordmarkLight from "@/assets/brix-wordmark-light.svg.asset.json";
+import wordmarkDark from "@/assets/brix-wordmark-dark.svg.asset.json";
 import authPanel from "@/assets/auth-panel.jpg";
 
 export const Route = createFileRoute("/portal")({
@@ -106,7 +106,7 @@ function PortalAuthPage() {
       <div className="relative flex min-h-svh flex-col px-5 py-8 sm:px-10 lg:min-h-0 lg:px-14 xl:px-20">
         <div className="flex items-center justify-between">
           <Link to="/" className="inline-flex items-center gap-3" aria-label="Brix Design Studio home">
-            <img src={wordmarkLight.url} alt="Brix Design Studio" className="h-5 w-auto" />
+            <img src={wordmarkDark.url} alt="Brix Design Studio" className="h-5 w-auto" />
           </Link>
           <Link
             to="/"

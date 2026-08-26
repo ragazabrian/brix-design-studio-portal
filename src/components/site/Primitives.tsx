@@ -12,8 +12,8 @@ export function Reveal({
   className,
 }: {
   children: ReactNode;
-  delay?: number;
-  className?: string;
+  delay?: number | undefined;
+  className?: string | undefined;
 }) {
   const reduce = useReducedMotion();
 
@@ -43,8 +43,8 @@ const pillVariants = {
 } as const;
 
 type PillProps = {
-  variant?: keyof typeof pillVariants;
-  className?: string;
+  variant?: keyof typeof pillVariants | undefined;
+  className?: string | undefined;
   children: ReactNode;
 };
 
@@ -54,7 +54,7 @@ export function PillLink({
   variant = "solid",
   className,
   children,
-}: PillProps & { to?: string; href?: string }) {
+}: PillProps & { to?: string | undefined; href?: string | undefined }) {
   const classes = cn(pillBase, pillVariants[variant], className);
 
   if (href) {

@@ -56,7 +56,7 @@ function DashboardPage() {
   const isStaff = role === "admin" || role === "designer";
 
   useEffect(() => {
-    if (!activeId && projects && projects.length > 0) setActiveId(projects[0].id);
+    if (!activeId && projects && projects.length > 0) setActiveId(projects[0]!.id);
   }, [projects, activeId]);
 
   const activeProject = useMemo(

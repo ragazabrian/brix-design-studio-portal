@@ -22,10 +22,10 @@ export function PortalShell({
   children,
 }: {
   title: string;
-  description?: string;
-  role?: AppRole;
-  profileName?: string | null;
-  avatarUrl?: string | null;
+  description?: string | undefined;
+  role?: AppRole | undefined;
+  profileName?: string | null | undefined;
+  avatarUrl?: string | null | undefined;
   children: ReactNode;
 }) {
   const navigate = useNavigate();

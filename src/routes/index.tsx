@@ -85,7 +85,7 @@ function Home() {
             </Reveal>
           ))}
 
-          <SpotlightBlock spotlight={spotlights[0]} />
+          <SpotlightBlock spotlight={spotlights[0]!} />
 
           {projects.slice(3).map((project) => (
             <Reveal
@@ -96,7 +96,7 @@ function Home() {
             </Reveal>
           ))}
 
-          <SpotlightBlock spotlight={spotlights[1]} />
+          <SpotlightBlock spotlight={spotlights[1]!} />
         </div>
 
         <div className="mt-12 flex justify-center">
@@ -137,7 +137,7 @@ function Home() {
                 Process, offcuts and press checks, posted as they happen.
               </h2>
               <div className="mt-7">
-                <ArrowLink href={studio.socials[0].href}>Go to Instagram</ArrowLink>
+                <ArrowLink href={studio.socials[0]!.href}>Go to Instagram</ArrowLink>
               </div>
             </div>
             <img

@@ -148,6 +148,13 @@ export function PortalShell({
               >
                 Projects
               </Link>
+              <Link
+                to="/assistant"
+                activeProps={{ className: "bg-frost" }}
+                className="rounded-full px-3 py-2 text-sm transition-colors hover:bg-frost"
+              >
+                Assistant
+              </Link>
               {role === "admin" ? (
                 <Link
                   to="/admin"

@@ -124,7 +124,11 @@ export function PortalShell({
     <div className="flex min-h-screen flex-col bg-paper">
       <header className="border-b border-border">
         <div className="page-shell flex flex-wrap items-center justify-between gap-4 py-4">
-          <Link to="/" aria-label={`${studio.shortName} home`} className="flex items-center gap-2">
+          <Link
+            to="/dashboard"
+            aria-label={`${studio.shortName} portal home`}
+            className="flex items-center gap-2"
+          >
             <img
               src={wordmarkLight.url}
               alt={`${studio.shortName} wordmark`}

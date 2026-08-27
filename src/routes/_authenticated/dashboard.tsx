@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -92,6 +92,27 @@ function DashboardPage() {
       profileName={profile?.full_name}
       avatarUrl={profile?.avatar_url}
     >
+      <section
+        aria-labelledby="assistant-heading"
+        className="mb-10 grid gap-4 rounded-3xl bg-frost p-6 md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:p-8"
+      >
+        <div>
+          <h2 id="assistant-heading" className="text-[19px] font-medium">
+            Studio assistant
+          </h2>
+          <p className="mt-2 max-w-xl text-caption text-muted-foreground">
+            Draft a brief, tidy up feedback, plan a timeline or summarise a call. Your chats are
+            saved to your account, and you can switch models any time.
+          </p>
+        </div>
+        <Link
+          to="/assistant"
+          className="inline-flex items-center justify-center rounded-full bg-ink px-5 py-2.5 text-sm text-paper transition-opacity hover:opacity-90"
+        >
+          Open assistant
+        </Link>
+      </section>
+
       <form
         role="search"
         onSubmit={(event) => event.preventDefault()}

@@ -69,9 +69,9 @@ export function AssistantChat({
     textareaRef.current?.focus();
   }, [threadId]);
 
-  function handleSubmit(event: React.FormEvent) {
+  function handleSubmit(message: { text?: string }, event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const text = input.trim();
+    const text = (message.text ?? input).trim();
     if (!text || busy) return;
     setInput("");
     void sendMessage({ text });

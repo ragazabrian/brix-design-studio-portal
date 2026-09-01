@@ -69,9 +69,9 @@ function NotificationsPopover({ onClose }: { onClose: () => void }) {
 
   return (
     <div
-      role="region"
+      role="dialog"
       aria-label="Notifications"
-      className="mt-2 rounded-2xl border border-border bg-background p-3"
+      className="absolute bottom-0 left-full z-50 ml-2 w-[19rem] max-w-[calc(100vw-2rem)] rounded-2xl border border-border bg-popover p-3 text-popover-foreground shadow-xl"
     >
       <div className="flex items-center justify-between gap-2">
         <h2 className="label-caps text-muted-foreground">Notifications</h2>

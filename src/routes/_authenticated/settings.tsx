@@ -23,13 +23,13 @@ import { useTheme, type ThemeChoice } from "@/lib/theme";
 export const Route = createFileRoute("/_authenticated/settings")({
   head: () => ({
     meta: [
-      { title: "Profile and settings | Brix Design Studio" },
+      { title: "Settings | Brix Design Studio" },
       { name: "robots", content: "noindex" },
       {
         name: "description",
         content: "Manage your Brix profile, preferences, notifications and access details.",
       },
-      { property: "og:title", content: "Profile and settings | Brix Design Studio" },
+      { property: "og:title", content: "Settings | Brix Design Studio" },
       {
         property: "og:description",
         content: "Manage your Brix profile, preferences, notifications and access details.",
@@ -156,7 +156,7 @@ function SettingsPage() {
 
   return (
     <PortalShell
-      title="Profile and settings"
+      title="Settings"
       description="Your details, preferences and notification choices for the studio portal."
       role={role}
       profileName={profile?.full_name}

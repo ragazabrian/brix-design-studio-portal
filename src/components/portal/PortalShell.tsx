@@ -25,6 +25,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNotifications, useSession, type AppRole } from "@/hooks/usePortal";
 import { useTheme } from "@/lib/theme";
 import { AssistantDock } from "@/components/portal/AssistantDock";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import wordmarkLight from "@/assets/brix-wordmark-light.svg.asset.json";
 import wordmarkDark from "@/assets/brix-wordmark-dark.svg.asset.json";
 
@@ -322,50 +331,91 @@ export function PortalShell({
             ) : null}
           </div>
 
-          <Link
-            to="/settings"
-            onClick={() => setNavOpen(false)}
-            activeProps={{ className: "bg-muted text-foreground" }}
-            className={`${linkClass} ${collapsed ? "lg:justify-center lg:px-0" : ""}`}
-            title={collapsed ? "Profile and settings" : undefined}
-          >
-            <HugeiconsIcon icon={Settings02Icon} size={18} strokeWidth={1.6} aria-hidden />
-            <span className={collapsed ? "lg:sr-only" : ""}>Profile and settings</span>
-          </Link>
-
-          <div
-            className={`mt-2 flex items-center gap-3 rounded-2xl bg-muted px-3 py-2.5 ${
-              collapsed ? "lg:flex-col lg:gap-2 lg:px-1" : ""
-            }`}
-          >
-            {avatarUrl ? (
-              <img
-                src={avatarUrl}
-                alt={profileName ? `Profile photo of ${profileName}` : "Your profile photo"}
-                width={36}
-                height={36}
-                referrerPolicy="no-referrer"
-                loading="lazy"
-                onError={(event) => {
-                  event.currentTarget.style.display = "none";
-                }}
-                className="h-9 w-9 shrink-0 rounded-full bg-background object-cover"
-              />
-            ) : null}
-            <div className={`min-w-0 flex-1 ${collapsed ? "lg:hidden" : ""}`}>
-              <p className="truncate text-[14px] font-medium">{profileName ?? "Your account"}</p>
-              {role ? <p className="text-caption text-muted-foreground">{roleLabel[role]}</p> : null}
-            </div>
-            <button
-              type="button"
-              onClick={signOut}
-              aria-label="Sign out"
-              title="Sign out"
-              className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border transition-colors hover:bg-background"
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                type="button"
+                variant="ghost"
+                aria-label="Open account menu"
+                className={`mt-2 h-auto w-full justify-start gap-3 rounded-2xl bg-muted px-3 py-2.5 text-left hover:bg-muted/80 ${
+                  collapsed ? "lg:justify-center lg:px-1" : ""
+                }`}
+              >
+                {avatarUrl ? (
+                  <img
+                    src={avatarUrl}
+                    alt=""
+                    width={36}
+                    height={36}
+                    referrerPolicy="no-referrer"
+                    loading="lazy"
+                    onError={(event) => {
+                      event.currentTarget.style.display = "none";
+                    }}
+                    className="h-9 w-9 shrink-0 rounded-full bg-background object-cover"
+                  />
+                ) : (
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-background text-sm font-semibold">
+                    {(profileName ?? "A").charAt(0).toUpperCase()}
+                  </span>
+                )}
+                <span className={`min-w-0 flex-1 ${collapsed ? "lg:sr-only" : ""}`}>
+                  <span className="block truncate text-[14px] font-medium">
+                    {profileName ?? "Your account"}
+                  </span>
+                  {role ? (
+                    <span className="block text-caption font-normal text-muted-foreground">
+                      {roleLabel[role]}
+                    </span>
+                  ) : null}
+                </span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              side="right"
+              align="end"
+              sideOffset={12}
+              className="w-[17rem] rounded-lg border-border p-2 shadow-2xl"
             >
-              <HugeiconsIcon icon={Logout01Icon} size={16} strokeWidth={1.6} aria-hidden />
-            </button>
-          </div>
+              <DropdownMenuLabel className="flex items-center gap-3 px-2 py-2 font-normal">
+                {avatarUrl ? (
+                  <img
+                    src={avatarUrl}
+                    alt={profileName ? `Profile photo of ${profileName}` : "Your profile photo"}
+                    width={38}
+                    height={38}
+                    referrerPolicy="no-referrer"
+                    className="h-10 w-10 rounded-full bg-muted object-cover"
+                  />
+                ) : (
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-muted font-semibold">
+                    {(profileName ?? "A").charAt(0).toUpperCase()}
+                  </span>
+                )}
+                <span className="min-w-0">
+                  <span className="block truncate font-semibold">{profileName ?? "Your account"}</span>
+                  <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <span className="h-2 w-2 rounded-full border border-muted-foreground" /> Active
+                  </span>
+                </span>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild className="px-2 py-2.5">
+                <Link to="/settings" onClick={() => setNavOpen(false)} className="w-full">
+                  <HugeiconsIcon icon={Settings02Icon} size={17} strokeWidth={1.6} aria-hidden />
+                  Settings
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onSelect={() => void signOut()}
+                className="px-2 py-2.5 text-destructive focus:text-destructive"
+              >
+                <HugeiconsIcon icon={Logout01Icon} size={17} strokeWidth={1.6} aria-hidden />
+                Sign out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 

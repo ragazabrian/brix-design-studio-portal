@@ -9,7 +9,12 @@ const tokenSchema = z.string().uuid();
 
 async function requireAdmin(userId: string) {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const { data, error } = await supabaseAdmin.from("user_roles").select("id").eq("user_id", userId).eq("role", "admin").maybeSingle();
+  const { data, error } = await supabaseAdmin
+    .from("user_roles")
+    .select("id")
+    .eq("user_id", userId)
+    .eq("role", "admin")
+    .maybeSingle();
   if (error || !data) throw new Error("Admin access is required.");
 }
 
@@ -18,7 +23,11 @@ export const createPortalInvitation = createServerFn({ method: "POST" })
   .inputValidator((input) =>
     z
       .object({
-        email: z.string().trim().email().transform((value) => value.toLowerCase()),
+        email: z
+          .string()
+          .trim()
+          .email()
+          .transform((value) => value.toLowerCase()),
         role: roleSchema,
         note: z.string().trim().max(500).optional(),
         projectIds: z.array(z.string().uuid()).max(50),
@@ -63,7 +72,9 @@ export const createPortalInvitation = createServerFn({ method: "POST" })
     }
 
     const request = getRequest();
-    const origin = request ? new URL(request.url).origin : "https://brixdesignstudio.lovable.app";
+    const origin = request
+      ? new URL(request.url).origin
+      : (process.env["SITE_URL"] ?? "http://localhost:8080");
     const redirectTo = `${origin}/invite?token=${encodeURIComponent(invitation.token)}`;
     const { error: emailError } = await supabaseAdmin.auth.admin.inviteUserByEmail(data.email, {
       redirectTo,

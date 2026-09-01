@@ -3,87 +3,35 @@ export type ChatModel = {
   id: string;
   label: string;
   note: string;
-  /** OpenAI models run through the gateway Responses API. */
+  /** Reasoning models run through OpenAI's Responses API. */
   responses: boolean;
 };
 
+// Verify these ids against the OpenAI account tied to OPENAI_API_KEY before
+// shipping — model availability changes over time.
 export const chatModels: ChatModel[] = [
   {
-    id: "google/gemini-3.7-flash",
-    label: "Gemini 3.7 Flash",
-    note: "Balanced default, quick replies",
+    id: "gpt-4o-mini",
+    label: "GPT-4o mini",
+    note: "Fast and low cost, conversational, no thinking step",
     responses: false,
   },
   {
-    id: "google/gemini-3.6-flash",
-    label: "Gemini 3.6 Flash",
-    note: "Fast general purpose",
-    responses: false,
-  },
-  {
-    id: "google/gemini-3.5-flash",
-    label: "Gemini 3.5 Flash",
-    note: "Fast general purpose",
-    responses: false,
-  },
-  {
-    id: "google/gemini-3.1-flash-lite",
-    label: "Gemini 3.1 Flash Lite",
-    note: "Cheapest, best for short tasks",
-    responses: false,
-  },
-  {
-    id: "google/gemini-3.1-pro-preview",
-    label: "Gemini 3.1 Pro",
-    note: "Deeper reasoning, slower",
-    responses: false,
-  },
-  {
-    id: "google/gemini-2.5-pro",
-    label: "Gemini 2.5 Pro",
-    note: "Long context and analysis",
-    responses: false,
-  },
-  {
-    id: "google/gemini-2.5-flash",
-    label: "Gemini 2.5 Flash",
-    note: "Steady, lower cost",
-    responses: false,
-  },
-  {
-    id: "openai/gpt-5.6-terra",
-    label: "GPT-5.6 Terra",
+    id: "gpt-4o",
+    label: "GPT-4o",
     note: "Everyday writing and thinking",
+    responses: false,
+  },
+  {
+    id: "o3-mini",
+    label: "o3-mini",
+    note: "Reasoning for harder problems",
     responses: true,
   },
   {
-    id: "openai/gpt-5.6-luna",
-    label: "GPT-5.6 Luna",
-    note: "Fast and low cost",
-    responses: true,
-  },
-  {
-    id: "openai/gpt-5.6-sol",
-    label: "GPT-5.6 Sol",
-    note: "Strongest for hard problems",
-    responses: true,
-  },
-  {
-    id: "openai/gpt-5.5",
-    label: "GPT-5.5",
-    note: "Frontier reasoning and coding",
-    responses: true,
-  },
-  {
-    id: "openai/gpt-5.4-mini",
-    label: "GPT-5.4 Mini",
-    note: "Good balance of speed and depth",
-    responses: true,
-  },
-  {
-    id: "openai/chat-latest",
-    label: "ChatGPT model",
-    note: "Conversational, no thinking step",
+    id: "o1",
+    label: "o1",
+    note: "Strongest reasoning, slower",
     responses: true,
   },
 ];

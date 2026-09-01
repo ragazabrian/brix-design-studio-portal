@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { createOpenAI } from "@ai-sdk/openai";
 import { createClient } from "@supabase/supabase-js";
 import { convertToModelMessages, streamText, type UIMessage } from "ai";
@@ -31,7 +30,7 @@ export const Route = createFileRoute("/api/chat")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const apiKey = process.env["LOVABLE_API_KEY"];
+        const apiKey = process.env["OPENAI_API_KEY"];
         const supabaseUrl = process.env["SUPABASE_URL"];
         const supabaseKey = process.env["SUPABASE_PUBLISHABLE_KEY"];
         if (!apiKey || !supabaseUrl || !supabaseKey) {
@@ -115,14 +114,11 @@ export const Route = createFileRoute("/api/chat")({
         }
 
         try {
+          const openai = createOpenAI({ apiKey });
+
           if (model.responses) {
-            const openai = createOpenAI({
-              baseURL: "https://ai.gateway.lovable.dev/v1",
-              apiKey,
-              headers: { "Lovable-API-Key": apiKey, "X-Lovable-AIG-SDK": "vercel-ai-sdk" },
-            });
             const reasoning =
-              model.id === "openai/chat-latest"
+              model.id === "gpt-4o-mini"
                 ? { store: false }
                 : {
                     forceReasoning: true,
@@ -147,14 +143,8 @@ export const Route = createFileRoute("/api/chat")({
             });
           }
 
-          const gateway = createOpenAICompatible({
-            name: "lovable",
-            baseURL: "https://ai.gateway.lovable.dev/v1",
-            headers: { "Lovable-API-Key": apiKey, "X-Lovable-AIG-SDK": "vercel-ai-sdk" },
-          });
-
           const result = streamText({
-            model: gateway(model.id),
+            model: openai(model.id),
             system: SYSTEM_PROMPT,
             messages: modelMessages,
             abortSignal: request.signal,

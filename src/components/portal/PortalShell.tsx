@@ -5,7 +5,7 @@ import {
   Calendar03Icon,
   DashboardSquare01Icon,
   File01Icon,
-  Grid01Icon,
+  GridIcon,
   Logout01Icon,
   Menu01Icon,
   Message01Icon,
@@ -43,7 +43,7 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   { to: "/dashboard", label: "Dashboard", icon: DashboardSquare01Icon },
-  { to: "/library", label: "Asset library", icon: Grid01Icon },
+  { to: "/library", label: "Asset library", icon: GridIcon },
   { to: "/guidelines", label: "Brand guidelines", icon: BookOpen01Icon },
   { to: "/modules", label: "Module library", icon: SparklesIcon },
   { to: "/documents", label: "Documents", icon: File01Icon },

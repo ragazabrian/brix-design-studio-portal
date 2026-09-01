@@ -165,9 +165,7 @@ export function AssistantDock() {
                 <PromptInputActionMenu>
                   <PromptInputActionMenuTrigger tooltip="Attach a file" />
                   <PromptInputActionMenuContent>
-                    <PromptInputActionMenuItem asChild>
-                      <PromptInputActionAddAttachments label="Attach from your device" />
-                    </PromptInputActionMenuItem>
+                    <PromptInputActionAddAttachments label="Attach from your device" />
                   </PromptInputActionMenuContent>
                 </PromptInputActionMenu>
                 <PromptInputSubmit status={chat.status} disabled={!busy && chat.messages.at(-1)?.role === "user" && false} onStop={() => void chat.stop()} />

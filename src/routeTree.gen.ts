@@ -20,11 +20,13 @@ import { Route as PortalRouteImport } from './routes/portal'
 import { Route as WorkRouteImport } from './routes/work'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedDesignRouteImport } from './routes/_authenticated/design'
 import { Route as AuthenticatedDocumentsRouteImport } from './routes/_authenticated/documents'
 import { Route as AuthenticatedGuidelinesRouteImport } from './routes/_authenticated/guidelines'
 import { Route as AuthenticatedLibraryRouteImport } from './routes/_authenticated/library'
 import { Route as AuthenticatedMeetingsRouteImport } from './routes/_authenticated/meetings'
 import { Route as AuthenticatedModulesRouteImport } from './routes/_authenticated/modules'
+import { Route as AuthenticatedPhasesRouteImport } from './routes/_authenticated/phases'
 import { Route as AuthenticatedRequestsRouteImport } from './routes/_authenticated/requests'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
@@ -87,6 +89,11 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedDesignRoute = AuthenticatedDesignRouteImport.update({
+  id: '/design',
+  path: '/design',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDocumentsRoute = AuthenticatedDocumentsRouteImport.update({
   id: '/documents',
   path: '/documents',
@@ -110,6 +117,11 @@ const AuthenticatedMeetingsRoute = AuthenticatedMeetingsRouteImport.update({
 const AuthenticatedModulesRoute = AuthenticatedModulesRouteImport.update({
   id: '/modules',
   path: '/modules',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPhasesRoute = AuthenticatedPhasesRouteImport.update({
+  id: '/phases',
+  path: '/phases',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedRequestsRoute = AuthenticatedRequestsRouteImport.update({
@@ -161,11 +173,13 @@ export interface FileRoutesByFullPath {
   '/work': typeof WorkRouteWithChildren
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/design': typeof AuthenticatedDesignRoute
   '/documents': typeof AuthenticatedDocumentsRoute
   '/guidelines': typeof AuthenticatedGuidelinesRoute
   '/library': typeof AuthenticatedLibraryRoute
   '/meetings': typeof AuthenticatedMeetingsRoute
   '/modules': typeof AuthenticatedModulesRoute
+  '/phases': typeof AuthenticatedPhasesRoute
   '/requests': typeof AuthenticatedRequestsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/api/chat': typeof ApiChatRoute
@@ -184,11 +198,13 @@ export interface FileRoutesByTo {
   '/portal': typeof PortalRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/design': typeof AuthenticatedDesignRoute
   '/documents': typeof AuthenticatedDocumentsRoute
   '/guidelines': typeof AuthenticatedGuidelinesRoute
   '/library': typeof AuthenticatedLibraryRoute
   '/meetings': typeof AuthenticatedMeetingsRoute
   '/modules': typeof AuthenticatedModulesRoute
+  '/phases': typeof AuthenticatedPhasesRoute
   '/requests': typeof AuthenticatedRequestsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/api/chat': typeof ApiChatRoute
@@ -210,11 +226,13 @@ export interface FileRoutesById {
   '/work': typeof WorkRouteWithChildren
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/design': typeof AuthenticatedDesignRoute
   '/_authenticated/documents': typeof AuthenticatedDocumentsRoute
   '/_authenticated/guidelines': typeof AuthenticatedGuidelinesRoute
   '/_authenticated/library': typeof AuthenticatedLibraryRoute
   '/_authenticated/meetings': typeof AuthenticatedMeetingsRoute
   '/_authenticated/modules': typeof AuthenticatedModulesRoute
+  '/_authenticated/phases': typeof AuthenticatedPhasesRoute
   '/_authenticated/requests': typeof AuthenticatedRequestsRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/api/chat': typeof ApiChatRoute
@@ -236,11 +254,13 @@ export interface FileRouteTypes {
     | '/work'
     | '/admin'
     | '/dashboard'
+    | '/design'
     | '/documents'
     | '/guidelines'
     | '/library'
     | '/meetings'
     | '/modules'
+    | '/phases'
     | '/requests'
     | '/settings'
     | '/api/chat'
@@ -259,11 +279,13 @@ export interface FileRouteTypes {
     | '/portal'
     | '/admin'
     | '/dashboard'
+    | '/design'
     | '/documents'
     | '/guidelines'
     | '/library'
     | '/meetings'
     | '/modules'
+    | '/phases'
     | '/requests'
     | '/settings'
     | '/api/chat'
@@ -284,11 +306,13 @@ export interface FileRouteTypes {
     | '/work'
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
+    | '/_authenticated/design'
     | '/_authenticated/documents'
     | '/_authenticated/guidelines'
     | '/_authenticated/library'
     | '/_authenticated/meetings'
     | '/_authenticated/modules'
+    | '/_authenticated/phases'
     | '/_authenticated/requests'
     | '/_authenticated/settings'
     | '/api/chat'
@@ -390,6 +414,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/design': {
+      id: '/_authenticated/design'
+      path: '/design'
+      fullPath: '/design'
+      preLoaderRoute: typeof AuthenticatedDesignRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/documents': {
       id: '/_authenticated/documents'
       path: '/documents'
@@ -423,6 +454,13 @@ declare module '@tanstack/react-router' {
       path: '/modules'
       fullPath: '/modules'
       preLoaderRoute: typeof AuthenticatedModulesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/phases': {
+      id: '/_authenticated/phases'
+      path: '/phases'
+      fullPath: '/phases'
+      preLoaderRoute: typeof AuthenticatedPhasesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/requests': {
@@ -480,11 +518,13 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedDesignRoute: typeof AuthenticatedDesignRoute
   AuthenticatedDocumentsRoute: typeof AuthenticatedDocumentsRoute
   AuthenticatedGuidelinesRoute: typeof AuthenticatedGuidelinesRoute
   AuthenticatedLibraryRoute: typeof AuthenticatedLibraryRoute
   AuthenticatedMeetingsRoute: typeof AuthenticatedMeetingsRoute
   AuthenticatedModulesRoute: typeof AuthenticatedModulesRoute
+  AuthenticatedPhasesRoute: typeof AuthenticatedPhasesRoute
   AuthenticatedRequestsRoute: typeof AuthenticatedRequestsRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedAssistantThreadIdRoute: typeof AuthenticatedAssistantThreadIdRoute
@@ -494,11 +534,13 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedDesignRoute: AuthenticatedDesignRoute,
   AuthenticatedDocumentsRoute: AuthenticatedDocumentsRoute,
   AuthenticatedGuidelinesRoute: AuthenticatedGuidelinesRoute,
   AuthenticatedLibraryRoute: AuthenticatedLibraryRoute,
   AuthenticatedMeetingsRoute: AuthenticatedMeetingsRoute,
   AuthenticatedModulesRoute: AuthenticatedModulesRoute,
+  AuthenticatedPhasesRoute: AuthenticatedPhasesRoute,
   AuthenticatedRequestsRoute: AuthenticatedRequestsRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedAssistantThreadIdRoute: AuthenticatedAssistantThreadIdRoute,

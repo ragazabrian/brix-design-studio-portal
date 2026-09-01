@@ -7,11 +7,13 @@ import {
   DashboardSquare01Icon,
   File01Icon,
   GridIcon,
+  Layers01Icon,
   Logout01Icon,
   Menu01Icon,
   Message01Icon,
   Notification03Icon,
   Settings02Icon,
+  PaintBrush01Icon,
   SidebarLeftIcon,
   SidebarRightIcon,
   SparklesIcon,
@@ -52,10 +54,12 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   { to: "/dashboard", label: "Dashboard", icon: DashboardSquare01Icon },
+  { to: "/phases", label: "Phases", icon: Layers01Icon },
+  { to: "/design", label: "Design", icon: PaintBrush01Icon },
+  { to: "/documents", label: "Documents", icon: File01Icon },
   { to: "/library", label: "Asset library", icon: GridIcon },
   { to: "/guidelines", label: "Brand guidelines", icon: BookOpen01Icon },
   { to: "/modules", label: "Module library", icon: SparklesIcon },
-  { to: "/documents", label: "Documents", icon: File01Icon },
   { to: "/meetings", label: "Meetings", icon: Calendar03Icon },
   { to: "/requests", label: "Requests", icon: Message01Icon },
   { to: "/assistant", label: "Assistant", icon: Message01Icon, staffOnly: true },
@@ -237,20 +241,17 @@ export function PortalShell({
           collapsed ? "lg:px-2" : "lg:px-5"
         }`}
       >
-        <div className="flex items-center justify-between gap-2 px-1">
+        <div className={`relative flex min-h-9 items-center gap-2 px-1 ${collapsed ? "lg:justify-center" : "justify-between"}`}>
           <Link
             to="/dashboard"
             aria-label={`${studio.shortName} portal home`}
             onClick={() => setNavOpen(false)}
-            className={`flex items-center ${collapsed ? "lg:hidden" : ""}`}
+            className="flex items-center"
           >
-            <img
-              src={resolvedTheme === "dark" ? wordmarkDark.url : wordmarkLight.url}
-              alt={`${studio.shortName} wordmark`}
-              width={1939}
-              height={573}
-              className="h-4 w-auto"
-            />
+            {collapsed ? (
+              <img src="/favicon.svg" alt={`${studio.shortName} mark`} width={32} height={32} className="hidden h-8 w-8 lg:block" />
+            ) : null}
+            <img src={resolvedTheme === "dark" ? wordmarkDark.url : wordmarkLight.url} alt={`${studio.shortName} wordmark`} width={1939} height={573} className={`h-4 w-auto ${collapsed ? "lg:hidden" : ""}`} />
           </Link>
           <button
             type="button"
@@ -258,7 +259,7 @@ export function PortalShell({
             aria-pressed={collapsed}
             aria-label={collapsed ? "Expand the sidebar" : "Collapse the sidebar"}
             title={collapsed ? "Expand the sidebar" : "Collapse the sidebar"}
-            className="hidden h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground lg:mx-auto lg:inline-flex"
+            className={`hidden h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground lg:inline-flex ${collapsed ? "absolute -right-1 top-0 translate-x-full bg-card shadow-sm" : "ml-auto"}`}
           >
             <HugeiconsIcon
               icon={collapsed ? SidebarRightIcon : SidebarLeftIcon}

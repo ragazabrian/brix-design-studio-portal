@@ -89,6 +89,17 @@ function DashboardPage() {
       profileName={profile?.full_name}
       avatarUrl={profile?.avatar_url}
     >
+      <nav aria-label="Dashboard views" className="mb-8 grid grid-cols-3 border-y border-border">
+        {[
+          { to: "/phases", label: "Phases" },
+          { to: "/design", label: "Design" },
+          { to: "/documents", label: "Documents" },
+        ].map((item) => (
+          <Link key={item.to} to={item.to} className="border-r border-border px-3 py-4 text-center text-sm font-medium transition-colors last:border-r-0 hover:bg-muted">
+            {item.label}
+          </Link>
+        ))}
+      </nav>
       <section
         aria-labelledby="assistant-heading"
         className="mb-10 grid gap-4 rounded-3xl bg-muted p-6 md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:p-8"

@@ -30,7 +30,6 @@ import { Shimmer } from "@/components/ai-elements/shimmer";
 import { uploadToStudioDrive } from "@/lib/drive.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { chatModels, findChatModel } from "@/lib/chat-models";
-import brixMark from "@/assets/brix-wordmark-dark.svg.asset.json";
 
 const authedFetch: typeof fetch = async (input, init) => {
   const { data } = await supabase.auth.getSession();
@@ -179,7 +178,7 @@ export function AssistantChat({
         <ConversationContent className="mx-auto w-full max-w-3xl gap-7 px-5 py-8 md:px-8">
           {messages.length === 0 ? (
             <div className="mx-auto flex min-h-[55vh] max-w-md flex-col items-center justify-center text-center">
-              <img src={brixMark.url} alt="Brix Design Studio" width={1939} height={573} className="mx-auto h-5 w-auto" />
+              <img src="/favicon.svg" alt="Brix Design Studio" width={52} height={52} className="mx-auto h-12 w-12" />
               <p className="mt-5 text-[17px] font-medium">Ask about your projects</p>
               <p className="mt-2 text-caption text-muted-foreground">
                 Draft a brief, tidy up feedback, plan a timeline or summarise a call. Pick a model

@@ -9,14 +9,11 @@ import { PillButton } from "@/components/site/Primitives";
 import { supabase } from "@/integrations/supabase/client";
 import {
   useActivity,
-  useIntegrations,
-  notify,
   useProfile,
   useProjects,
   useRoles,
   useSession,
   useTasks,
-  useTimeEntries,
   type AppRole,
 } from "@/hooks/usePortal";
 

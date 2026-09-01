@@ -99,17 +99,22 @@ export function AssistantDock() {
     if (open) textareaRef.current?.focus();
   }, [open]);
 
-  async function submit(message: { text: string; files: Array<{ url: string; filename: string; mediaType?: string }>; }, event: React.FormEvent<HTMLFormElement>) {
+  async function submit(
+    message: { text?: string; files?: Array<{ url?: string; filename?: string; mediaType?: string }> },
+    event: React.FormEvent<HTMLFormElement>,
+  ) {
     event.preventDefault();
     if (!activeThread || chat.status === "submitted" || chat.status === "streaming") return;
-    const text = message.text.trim();
-    if (!text && message.files.length === 0) return;
+    const text = (message.text ?? "").trim();
+    const files = (message.files ?? []).filter((item) => Boolean(item.url));
+    if (!text && files.length === 0) return;
 
     const uploaded: string[] = [];
-    for (const item of message.files) {
+    for (const item of files) {
       try {
-        const response = await fetch(item.url);
-        const file = new File([await response.blob()], item.filename, { type: item.mediaType ?? "application/octet-stream" });
+        const response = await fetch(item.url!);
+        const name = item.filename ?? "attachment";
+        const file = new File([await response.blob()], name, { type: item.mediaType ?? "application/octet-stream" });
         const saved = await upload({ data: { name: file.name, mimeType: file.type, data: await fileToBase64(file), threadId: activeThread.id } });
         uploaded.push(saved.name);
       } catch {

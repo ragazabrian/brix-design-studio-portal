@@ -43,6 +43,7 @@ export const Route = createFileRoute("/_authenticated/settings")({
 
 type SettingsTab = "profile" | "preferences" | "notifications" | "access";
 type Frequency = "immediately" | "daily" | "never";
+type FrequencyKey = "project" | "request" | "news";
 
 const tabItems: Array<{
   id: SettingsTab;
@@ -72,7 +73,7 @@ function SettingsPage() {
   const queryClient = useQueryClient();
   const [tab, setTab] = useState<SettingsTab>("profile");
   const [saving, setSaving] = useState(false);
-  const [frequencies, setFrequencies] = useState<Record<string, Frequency>>({
+  const [frequencies, setFrequencies] = useState<Record<FrequencyKey, Frequency>>({
     project: "immediately",
     request: "immediately",
     news: "daily",
@@ -97,7 +98,7 @@ function SettingsPage() {
     }
   }, []);
 
-  function updateFrequency(key: string, value: Frequency) {
+  function updateFrequency(key: FrequencyKey, value: Frequency) {
     const next = { ...frequencies, [key]: value };
     setFrequencies(next);
     window.localStorage.setItem("brix-notification-frequencies", JSON.stringify(next));
@@ -144,7 +145,8 @@ function SettingsPage() {
 
   async function setNotifyPreference(key: "notify_in_app" | "notify_email", value: boolean) {
     if (!user) return;
-    const { error } = await supabase.from("profiles").update({ [key]: value }).eq("id", user.id);
+    const patch = key === "notify_in_app" ? { notify_in_app: value } : { notify_email: value };
+    const { error } = await supabase.from("profiles").update(patch).eq("id", user.id);
     if (error) {
       toast.error("That notification preference was not saved.");
       return;
@@ -296,9 +298,9 @@ function SettingsPage() {
               <section className={sectionClass} aria-labelledby="activity-notifications-heading">
                 <h2 id="activity-notifications-heading" className="text-[20px] font-medium">Activity preferences</h2>
                 <div className="mt-6 divide-y divide-border border-y border-border">
-                  <FrequencyRow label="Project updates" value={frequencies.project} onChange={(value) => updateFrequency("project", value)} />
-                  <FrequencyRow label="Request replies" value={frequencies.request} onChange={(value) => updateFrequency("request", value)} />
-                  <FrequencyRow label="Studio news" value={frequencies.news} onChange={(value) => updateFrequency("news", value)} />
+                  <FrequencyRow label="Project updates" value={frequencies["project"]} onChange={(value) => updateFrequency("project", value)} />
+                  <FrequencyRow label="Request replies" value={frequencies["request"]} onChange={(value) => updateFrequency("request", value)} />
+                  <FrequencyRow label="Studio news" value={frequencies["news"]} onChange={(value) => updateFrequency("news", value)} />
                 </div>
               </section>
             </div>
@@ -310,7 +312,10 @@ function SettingsPage() {
                 <h2 id="access-heading" className="text-[20px] font-medium">Account access</h2>
                 <dl className="mt-6 divide-y divide-border border-y border-border">
                   <DetailRow label="Email" value={user?.email ?? "Not available"} />
-                  <DetailRow label="Role" value={role ? role[0].toUpperCase() + role.slice(1) : "Not assigned"} />
+                  <DetailRow
+                    label="Role"
+                    value={role === "admin" ? "Admin" : role === "designer" ? "Designer" : role === "client" ? "Client" : "Not assigned"}
+                  />
                   <DetailRow label="Status" value={profile?.is_active === false ? "Deactivated" : "Active"} />
                   <DetailRow label="Sign-in" value="Managed by your studio account" />
                 </dl>

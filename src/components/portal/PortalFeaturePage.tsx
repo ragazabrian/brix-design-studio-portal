@@ -1,5 +1,4 @@
 import { Link } from "@tanstack/react-router";
-import { useMemo } from "react";
 
 import { ProjectPicker } from "@/components/portal/ProjectPicker";
 import { PortalShell } from "@/components/portal/PortalShell";

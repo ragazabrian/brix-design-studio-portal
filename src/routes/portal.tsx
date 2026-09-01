@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { motion, useReducedMotion } from "motion/react";
 
 import { supabase } from "@/integrations/supabase/client";
+import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
 import wordmarkDark from "@/assets/brix-wordmark-dark.svg";
 import authPanel from "@/assets/auth-panel.jpg";
 
@@ -42,29 +43,6 @@ export const Route = createFileRoute("/portal")({
 const inputClass =
   "w-full rounded-xl border border-paper/12 bg-paper/[0.05] px-4 py-3 text-[15px] text-paper transition-colors placeholder:text-paper/35 hover:border-paper/20 focus-visible:border-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/60";
 
-function GoogleMark() {
-  return (
-    <svg viewBox="0 0 48 48" width="18" height="18" aria-hidden focusable="false">
-      <path
-        fill="#EA4335"
-        d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.7-6.7C35.6 2.5 30.2 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.8 6.1C12.3 13.4 17.6 9.5 24 9.5Z"
-      />
-      <path
-        fill="#4285F4"
-        d="M46.5 24.5c0-1.6-.15-3.2-.45-4.7H24v9.1h12.6c-.55 2.9-2.2 5.4-4.7 7.1l7.6 5.9c4.4-4.1 7-10.1 7-17.4Z"
-      />
-      <path
-        fill="#FBBC05"
-        d="M10.4 28.7a14.6 14.6 0 0 1 0-9.4l-7.8-6.1a24 24 0 0 0 0 21.6l7.8-6.1Z"
-      />
-      <path
-        fill="#34A853"
-        d="M24 48c6.5 0 11.9-2.1 15.5-5.8l-7.6-5.9c-2.1 1.4-4.8 2.2-7.9 2.2-6.4 0-11.7-3.9-13.6-9.8l-7.8 6.1C6.5 42.6 14.6 48 24 48Z"
-      />
-    </svg>
-  );
-}
-
 function PortalAuthPage() {
   const navigate = useNavigate();
   const { next } = Route.useSearch();
@@ -83,21 +61,12 @@ function PortalAuthPage() {
     };
   }, [navigate, safeNext]);
 
-  async function onGoogle() {
-    setBusy(true);
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/portal${next ? `?next=${encodeURIComponent(next)}` : ""}`,
-      },
-    });
-    if (error) {
-      setBusy(false);
-      toast.error("Google sign in did not complete. Try again or use your email and password.");
-    }
-    // On success the browser redirects to Google immediately; the on-mount
-    // getSession() effect above picks up the session and navigates once it
-    // returns to /portal.
+  function onGoogleSuccess() {
+    navigate({ to: safeNext as "/dashboard" });
+  }
+
+  function onGoogleError(message: string) {
+    toast.error(message);
   }
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -166,15 +135,12 @@ function PortalAuthPage() {
               : "Use your work email so we can match you to the right projects."}
           </p>
 
-          <button
-            type="button"
-            onClick={onGoogle}
+          <GoogleSignInButton
+            onSuccess={onGoogleSuccess}
+            onError={onGoogleError}
             disabled={busy}
-            className="mt-7 inline-flex w-full items-center justify-center gap-3 rounded-xl bg-paper px-5 py-3 text-[15px] font-medium text-obsidian transition-all duration-300 hover:-translate-y-0.5 hover:bg-paper/90 disabled:translate-y-0 disabled:opacity-60"
-          >
-            <GoogleMark />
-            Continue with Google
-          </button>
+            className="mt-7 flex justify-center"
+          />
 
           <div className="my-5 flex items-center gap-4 text-paper/40">
             <span className="h-px flex-1 bg-paper/12" />

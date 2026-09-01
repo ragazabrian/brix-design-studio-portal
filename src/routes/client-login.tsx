@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import wordmarkDark from "@/assets/brix-wordmark-dark.svg";
 import authPanel from "@/assets/auth-panel.jpg";
 import { Button } from "@/components/ui/button";
+import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/client-login")({
@@ -55,16 +56,12 @@ function ClientLoginPage() {
     navigate({ to: "/client/dashboard" });
   }
 
-  async function googleSignIn() {
-    setBusy(true);
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: `${window.location.origin}/client-login` },
-    });
-    if (error) {
-      setBusy(false);
-      toast.error("Google sign in did not complete.");
-    }
+  function onGoogleSuccess() {
+    navigate({ to: "/client/dashboard" });
+  }
+
+  function onGoogleError(message: string) {
+    toast.error(message);
   }
 
   const field =
@@ -80,15 +77,12 @@ function ClientLoginPage() {
           <p className="mt-4 max-w-sm text-paper/60">
             Sign in to view the projects, files, guidelines, modules, and documents shared with you.
           </p>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={googleSignIn}
+          <GoogleSignInButton
+            onSuccess={onGoogleSuccess}
+            onError={onGoogleError}
             disabled={busy}
-            className="mt-8 h-11 border-paper/20 bg-paper text-obsidian hover:bg-paper/90"
-          >
-            Continue with Google
-          </Button>
+            className="mt-8 flex justify-center"
+          />
           <div className="my-5 flex items-center gap-3 text-xs text-paper/40">
             <span className="h-px flex-1 bg-paper/15" />
             or use email

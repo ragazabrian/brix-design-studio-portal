@@ -7,6 +7,7 @@ import { toast } from "sonner";
 
 import wordmarkDark from "@/assets/brix-wordmark-dark.svg";
 import { Button } from "@/components/ui/button";
+import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
 import { supabase } from "@/integrations/supabase/client";
 import { acceptPortalInvitation, getPortalInvitation } from "@/lib/invitations.functions";
 
@@ -99,16 +100,13 @@ function InvitePage() {
     await complete();
   }
 
-  async function useGoogle() {
-    if (!token) return;
-    sessionStorage.setItem("brix-pending-invite", token);
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/invite?token=${encodeURIComponent(token)}`,
-      },
-    });
-    if (error) toast.error("Google sign in did not complete.");
+  async function onGoogleSuccess() {
+    const { data } = await supabase.auth.getUser();
+    setSessionEmail(data.user?.email ?? null);
+  }
+
+  function onGoogleError(message: string) {
+    toast.error(message);
   }
 
   const field =
@@ -216,14 +214,11 @@ function InvitePage() {
               )
             ) : (
               <div className="mt-8">
-                <Button
-                  type="button"
-                  onClick={useGoogle}
-                  variant="outline"
-                  className="h-11 w-full border-paper/20 bg-paper text-obsidian hover:bg-paper/90"
-                >
-                  Continue with Google
-                </Button>
+                <GoogleSignInButton
+                  onSuccess={onGoogleSuccess}
+                  onError={onGoogleError}
+                  className="flex justify-center"
+                />
                 <div className="my-5 flex items-center gap-3 text-xs text-paper/40">
                   <span className="h-px flex-1 bg-paper/15" />
                   or sign in

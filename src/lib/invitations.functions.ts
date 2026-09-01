@@ -7,26 +7,9 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 const roleSchema = z.enum(["admin", "designer", "client"]);
 const tokenSchema = z.string().uuid();
 
-async function requireAdmin(context: {
-  supabase: {
-    from: (table: "user_roles") => {
-      select: (columns: string) => {
-        eq: (column: string, value: string) => {
-          eq: (column: string, value: string) => {
-            maybeSingle: () => Promise<{ data: unknown; error: { message: string } | null }>;
-          };
-        };
-      };
-    };
-  };
-  userId: string;
-}) {
-  const { data, error } = await context.supabase
-    .from("user_roles")
-    .select("id")
-    .eq("user_id", context.userId)
-    .eq("role", "admin")
-    .maybeSingle();
+async function requireAdmin(userId: string) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data, error } = await supabaseAdmin.from("user_roles").select("id").eq("user_id", userId).eq("role", "admin").maybeSingle();
   if (error || !data) throw new Error("Admin access is required.");
 }
 
@@ -43,7 +26,7 @@ export const createPortalInvitation = createServerFn({ method: "POST" })
       .parse(input),
   )
   .handler(async ({ data, context }) => {
-    await requireAdmin(context);
+    await requireAdmin(context.userId);
     if (data.role === "client" && data.projectIds.length === 0) {
       throw new Error("Choose at least one project for a client.");
     }

@@ -27,7 +27,7 @@ function ClientLoginPage() {
   const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
 
-  async function signIn(event: React.FormEvent<HTMLFormElement>) {
+  async function signIn(event: React.FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     setBusy(true);
@@ -36,7 +36,10 @@ function ClientLoginPage() {
       password: String(data.get("password") ?? ""),
     });
     setBusy(false);
-    if (error) return toast.error("That email and password do not match a client account.");
+    if (error) {
+      toast.error("That email and password do not match a client account.");
+      return;
+    }
     navigate({ to: "/client/dashboard" });
   }
 

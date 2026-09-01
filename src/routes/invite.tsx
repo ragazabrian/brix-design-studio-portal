@@ -13,7 +13,7 @@ import { acceptPortalInvitation, getPortalInvitation } from "@/lib/invitations.f
 
 export const Route = createFileRoute("/invite")({
   validateSearch: (search: Record<string, unknown>) => ({
-    token: typeof search.token === "string" ? search.token : "",
+    token: typeof search["token"] === "string" ? search["token"] : "",
   }),
   head: () => ({
     meta: [
@@ -59,10 +59,11 @@ function InvitePage() {
     if (!token) return;
     setBusy(true);
     if (password || fullName) {
-      const { error } = await supabase.auth.updateUser({
+      const attributes = {
         ...(password ? { password } : {}),
-        data: fullName ? { full_name: fullName } : undefined,
-      });
+        ...(fullName ? { data: { full_name: fullName } } : {}),
+      };
+      const { error } = await supabase.auth.updateUser(attributes);
       if (error) {
         setBusy(false);
         toast.error(error.message);
@@ -79,7 +80,7 @@ function InvitePage() {
     }
   }
 
-  async function signIn(event: React.FormEvent<HTMLFormElement>) {
+  async function signIn(event: React.FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     setBusy(true);
@@ -88,7 +89,10 @@ function InvitePage() {
       password: String(data.get("password") ?? ""),
     });
     setBusy(false);
-    if (error) return toast.error("That email and password do not match an account.");
+    if (error) {
+      toast.error("That email and password do not match an account.");
+      return;
+    }
     await complete();
   }
 

@@ -174,7 +174,7 @@ function DashboardPage() {
             </p>
           )}
 
-          <Integrations />
+          
         </aside>
 
         <div className="space-y-12">

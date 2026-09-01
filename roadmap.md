@@ -8,8 +8,8 @@
 - Landing page and portfolio: hidden for now, kept in the codebase for later.
 
 ## Tasks
-- [ ] Dashboard: add Phases, Design, and Documents views using existing project data
-- [ ] Sidebar: right-align the collapse control and retain favicon branding in compact mode
+- [x] Dashboard: add Phases, Design, and Documents views using existing project data
+- [x] Sidebar: right-align the collapse control and retain favicon branding in compact mode
 - [x] Roadmap recorded
 - [x] Database: library assets, guidelines, modules, meetings, asset requests, invite tokens, chat attachments
 - [x] Hide landing + portfolio routes (redirect to portal sign in)

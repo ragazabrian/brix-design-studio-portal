@@ -46,6 +46,110 @@ export type Database = {
           },
         ]
       }
+      asset_requests: {
+        Row: {
+          brief: string | null
+          created_at: string
+          hours_requested: number
+          id: string
+          kind: string
+          project_id: string
+          requested_by: string | null
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          brief?: string | null
+          created_at?: string
+          hours_requested?: number
+          id?: string
+          kind?: string
+          project_id: string
+          requested_by?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          brief?: string | null
+          created_at?: string
+          hours_requested?: number
+          id?: string
+          kind?: string
+          project_id?: string
+          requested_by?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "asset_requests_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_attachments: {
+        Row: {
+          created_at: string
+          drive_file_id: string
+          id: string
+          message_id: string | null
+          mime_type: string | null
+          name: string
+          size_bytes: number
+          thread_id: string | null
+          thumbnail_url: string | null
+          user_id: string
+          web_view_link: string | null
+        }
+        Insert: {
+          created_at?: string
+          drive_file_id: string
+          id?: string
+          message_id?: string | null
+          mime_type?: string | null
+          name: string
+          size_bytes?: number
+          thread_id?: string | null
+          thumbnail_url?: string | null
+          user_id: string
+          web_view_link?: string | null
+        }
+        Update: {
+          created_at?: string
+          drive_file_id?: string
+          id?: string
+          message_id?: string | null
+          mime_type?: string | null
+          name?: string
+          size_bytes?: number
+          thread_id?: string | null
+          thumbnail_url?: string | null
+          user_id?: string
+          web_view_link?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_attachments_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "chat_messages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_attachments_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "chat_threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       chat_messages: {
         Row: {
           content: string
@@ -242,6 +346,53 @@ export type Database = {
           },
         ]
       }
+      guidelines: {
+        Row: {
+          body: string
+          created_at: string
+          created_by: string | null
+          id: string
+          image_path: string | null
+          position: number
+          project_id: string
+          section: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          body?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          image_path?: string | null
+          position?: number
+          project_id: string
+          section?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          image_path?: string | null
+          position?: number
+          project_id?: string
+          section?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guidelines_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       integration_connections: {
         Row: {
           created_at: string
@@ -283,33 +434,145 @@ export type Database = {
           accepted_at: string | null
           created_at: string
           email: string
+          expires_at: string
           id: string
           invited_by: string | null
           note: string | null
           role: Database["public"]["Enums"]["app_role"]
           status: string
+          token: string
         }
         Insert: {
           accepted_at?: string | null
           created_at?: string
           email: string
+          expires_at?: string
           id?: string
           invited_by?: string | null
           note?: string | null
           role?: Database["public"]["Enums"]["app_role"]
           status?: string
+          token?: string
         }
         Update: {
           accepted_at?: string | null
           created_at?: string
           email?: string
+          expires_at?: string
           id?: string
           invited_by?: string | null
           note?: string | null
           role?: Database["public"]["Enums"]["app_role"]
           status?: string
+          token?: string
         }
         Relationships: []
+      }
+      library_assets: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          kind: string
+          mime_type: string | null
+          name: string
+          project_id: string
+          size_bytes: number
+          storage_path: string | null
+          tags: string[]
+          thumbnail_path: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          kind?: string
+          mime_type?: string | null
+          name: string
+          project_id: string
+          size_bytes?: number
+          storage_path?: string | null
+          tags?: string[]
+          thumbnail_path?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          kind?: string
+          mime_type?: string | null
+          name?: string
+          project_id?: string
+          size_bytes?: number
+          storage_path?: string | null
+          tags?: string[]
+          thumbnail_path?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "library_assets_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      meetings: {
+        Row: {
+          agenda: string | null
+          created_at: string
+          duration_minutes: number
+          id: string
+          meeting_url: string | null
+          project_id: string
+          requested_by: string | null
+          starts_at: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          agenda?: string | null
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          meeting_url?: string | null
+          project_id: string
+          requested_by?: string | null
+          starts_at: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          agenda?: string | null
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          meeting_url?: string | null
+          project_id?: string
+          requested_by?: string | null
+          starts_at?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "meetings_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       notifications: {
         Row: {
@@ -639,18 +902,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      can_view_project: {
-        Args: { _project_id: string; _user_id: string }
-        Returns: boolean
-      }
-      has_role: {
-        Args: {
-          _role: Database["public"]["Enums"]["app_role"]
-          _user_id: string
-        }
-        Returns: boolean
-      }
-      is_staff: { Args: { _user_id: string }; Returns: boolean }
+      [_ in never]: never
     }
     Enums: {
       app_role: "admin" | "designer" | "client"

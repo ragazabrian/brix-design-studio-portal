@@ -49,8 +49,9 @@ function fileToBase64(file: File) {
   });
 }
 
-function AttachmentPreview() {
+function AttachmentPreview({ onFilesChange }: { onFilesChange: (count: number) => void }) {
   const attachments = usePromptInputAttachments();
+  useEffect(() => onFilesChange(attachments.files.length), [attachments.files.length, onFilesChange]);
   if (attachments.files.length === 0) return null;
 
   return (
@@ -106,8 +107,8 @@ export function AssistantChat({
   const upload = useServerFn(uploadToStudioDrive);
   const [model, setModel] = useState(() => findChatModel(initialModel).id);
   const [input, setInput] = useState("");
+  const [attachmentCount, setAttachmentCount] = useState(0);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const attachments = usePromptInputAttachments();
 
   const { messages, sendMessage, status, stop } = useChat({
     id: threadId,
@@ -219,7 +220,7 @@ export function AssistantChat({
           maxFileSize={20 * 1024 * 1024}
           onError={(error) => toast.error(error.message)}
         >
-          <AttachmentPreview />
+          <AttachmentPreview onFilesChange={setAttachmentCount} />
           <PromptInputTextarea
             ref={textareaRef}
             value={input}
@@ -251,7 +252,7 @@ export function AssistantChat({
             </div>
             <PromptInputSubmit
               status={status}
-              disabled={!busy && !input.trim() && attachments.files.length === 0}
+              disabled={!busy && !input.trim() && attachmentCount === 0}
               onClick={busy ? () => void stop() : undefined}
             />
           </PromptInputFooter>

@@ -37,8 +37,9 @@ const authedFetch: typeof fetch = async (input, init) => {
   return fetch(input, { ...init, headers });
 };
 
-function AttachmentPreview() {
+function AttachmentPreview({ onFilesChange }: { onFilesChange: (count: number) => void }) {
   const attachments = usePromptInputAttachments();
+  useEffect(() => onFilesChange(attachments.files.length), [attachments.files.length, onFilesChange]);
   if (attachments.files.length === 0) return null;
 
   return (
@@ -99,8 +100,8 @@ export function AssistantDock() {
   const upload = useServerFn(uploadToStudioDrive);
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
+  const [attachmentCount, setAttachmentCount] = useState(0);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const attachments = usePromptInputAttachments();
 
   const chat = useChat({
     id: activeThread?.id ?? "portal-assistant",
@@ -208,7 +209,7 @@ export function AssistantDock() {
               maxFileSize={20 * 1024 * 1024}
               onError={(error) => toast.error(error.message)}
             >
-              <AttachmentPreview />
+              <AttachmentPreview onFilesChange={setAttachmentCount} />
               <PromptInputTextarea
                 ref={textareaRef}
                 value={input}
@@ -225,7 +226,7 @@ export function AssistantDock() {
                 </PromptInputActionMenu>
                 <PromptInputSubmit
                   status={chat.status}
-                  disabled={!busy && !input.trim() && attachments.files.length === 0}
+                  disabled={!busy && !input.trim() && attachmentCount === 0}
                   onStop={() => void chat.stop()}
                 />
               </PromptInputFooter>

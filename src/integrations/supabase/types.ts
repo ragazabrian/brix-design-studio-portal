@@ -610,45 +610,78 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
+          bio: string | null
           company: string | null
           created_at: string
+          display_name: string | null
           email: string | null
           full_name: string | null
           id: string
+          instagram_handle: string | null
           is_active: boolean
           job_title: string | null
+          language: string | null
+          linkedin_handle: string | null
+          name_pronunciation: string | null
           notify_email: boolean
           notify_in_app: boolean
           onboarded: boolean
+          phone: string | null
+          theme_preference: string
+          timezone: string | null
           updated_at: string
+          website_url: string | null
+          x_handle: string | null
         }
         Insert: {
           avatar_url?: string | null
+          bio?: string | null
           company?: string | null
           created_at?: string
+          display_name?: string | null
           email?: string | null
           full_name?: string | null
           id: string
+          instagram_handle?: string | null
           is_active?: boolean
           job_title?: string | null
+          language?: string | null
+          linkedin_handle?: string | null
+          name_pronunciation?: string | null
           notify_email?: boolean
           notify_in_app?: boolean
           onboarded?: boolean
+          phone?: string | null
+          theme_preference?: string
+          timezone?: string | null
           updated_at?: string
+          website_url?: string | null
+          x_handle?: string | null
         }
         Update: {
           avatar_url?: string | null
+          bio?: string | null
           company?: string | null
           created_at?: string
+          display_name?: string | null
           email?: string | null
           full_name?: string | null
           id?: string
+          instagram_handle?: string | null
           is_active?: boolean
           job_title?: string | null
+          language?: string | null
+          linkedin_handle?: string | null
+          name_pronunciation?: string | null
           notify_email?: boolean
           notify_in_app?: boolean
           onboarded?: boolean
+          phone?: string | null
+          theme_preference?: string
+          timezone?: string | null
           updated_at?: string
+          website_url?: string | null
+          x_handle?: string | null
         }
         Relationships: []
       }

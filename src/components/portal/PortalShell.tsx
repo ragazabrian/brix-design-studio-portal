@@ -181,6 +181,12 @@ export function PortalShell({
     setCollapsed(window.localStorage.getItem(COLLAPSE_KEY) === "true");
   }, []);
 
+  useEffect(() => {
+    if (role === "client" && !clientMode) {
+      navigate({ to: "/client/dashboard", replace: true });
+    }
+  }, [clientMode, navigate, role]);
+
   function toggleCollapsed() {
     setCollapsed((value) => {
       const next = !value;
@@ -212,7 +218,7 @@ export function PortalShell({
 
   return (
     <div
-      className={`min-h-screen bg-background text-foreground lg:grid ${
+      className={`${clientMode ? "dark" : ""} min-h-screen bg-background text-foreground lg:grid ${
         collapsed ? "lg:grid-cols-[4.5rem_minmax(0,1fr)]" : "lg:grid-cols-[16rem_minmax(0,1fr)]"
       }`}
     >

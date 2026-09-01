@@ -58,9 +58,9 @@ function InvitePage() {
   async function complete(password?: string, fullName?: string) {
     if (!token) return;
     setBusy(true);
-    if (password) {
+    if (password || fullName) {
       const { error } = await supabase.auth.updateUser({
-        password,
+        ...(password ? { password } : {}),
         data: fullName ? { full_name: fullName } : undefined,
       });
       if (error) {
@@ -126,7 +126,7 @@ function InvitePage() {
               sessionEmail.toLowerCase() === invite.email.toLowerCase() ? (
                 <form className="mt-8 space-y-4" onSubmit={(event) => { event.preventDefault(); const data = new FormData(event.currentTarget); void complete(String(data.get("password") ?? ""), String(data.get("full_name") ?? "")); }}>
                   <div><label htmlFor="full_name" className="label-caps mb-2 block text-paper/55">Full name</label><input id="full_name" name="full_name" required className={field} /></div>
-                  <div><label htmlFor="new_password" className="label-caps mb-2 block text-paper/55">Create password</label><input id="new_password" name="password" type="password" minLength={8} required className={field} /></div>
+                  <div><label htmlFor="new_password" className="label-caps mb-2 block text-paper/55">Set password (optional)</label><input id="new_password" name="password" type="password" minLength={8} autoComplete="new-password" className={field} /><p className="mt-2 text-xs text-paper/45">Leave blank if you use Google or already have a password.</p></div>
                   <Button type="submit" disabled={busy} className="h-11 w-full bg-brand text-paper hover:bg-brand-deep"><HugeiconsIcon icon={CheckmarkCircle02Icon} size={18} />{busy ? "Setting up your account" : "Accept invitation"}</Button>
                 </form>
               ) : <p className="mt-8 border border-destructive/40 bg-destructive/10 p-4 text-sm">You are signed in as {sessionEmail}. Sign out, then use {invite.email} to accept this invitation.</p>

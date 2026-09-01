@@ -309,7 +309,17 @@ export function PortalShell({
                 </span>
               ) : null}
             </button>
-            {notifyOpen ? <NotificationsPopover onClose={() => setNotifyOpen(false)} collapsed={collapsed} /> : null}
+            {notifyOpen ? (
+              <>
+                <button
+                  type="button"
+                  aria-label="Close notifications"
+                  onClick={() => setNotifyOpen(false)}
+                  className="fixed inset-0 z-50 cursor-default bg-transparent"
+                />
+                <NotificationsPopover onClose={() => setNotifyOpen(false)} collapsed={collapsed} />
+              </>
+            ) : null}
           </div>
 
           <Link

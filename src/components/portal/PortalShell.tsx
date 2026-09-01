@@ -12,11 +12,13 @@ import {
   Message01Icon,
   Notification03Icon,
   Settings02Icon,
+  SidebarLeftIcon,
+  SidebarRightIcon,
   SparklesIcon,
   UserGroupIcon,
 } from "@hugeicons/core-free-icons";
 import { useQueryClient } from "@tanstack/react-query";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { studio } from "@/data/site";
 import { supabase } from "@/integrations/supabase/client";

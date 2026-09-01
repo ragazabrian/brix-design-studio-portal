@@ -84,7 +84,7 @@ function AssistantThreadPage() {
             type="button"
             onClick={startChat}
             disabled={createThread.isPending}
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-ink px-4 py-2.5 text-sm text-paper transition-opacity hover:opacity-90 disabled:opacity-50"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
           >
             <HugeiconsIcon icon={PlusSignIcon} size={17} strokeWidth={1.8} aria-hidden />
             New chat
@@ -97,13 +97,13 @@ function AssistantThreadPage() {
                 <div
                   key={item.id}
                   className={`grid grid-cols-[minmax(0,1fr)_auto] items-center gap-1 rounded-2xl px-1 ${
-                    active ? "bg-frost" : ""
+                    active ? "bg-muted" : ""
                   }`}
                 >
                   <Link
                     to="/assistant/$threadId"
                     params={{ threadId: item.id }}
-                    className="truncate rounded-2xl px-3 py-2.5 text-sm transition-colors hover:bg-frost"
+                    className="truncate rounded-2xl px-3 py-2.5 text-sm transition-colors hover:bg-muted"
                     aria-current={active ? "page" : undefined}
                   >
                     {item.title}
@@ -112,7 +112,7 @@ function AssistantThreadPage() {
                     type="button"
                     onClick={() => removeChat(item.id)}
                     aria-label={`Delete chat ${item.title}`}
-                    className="inline-flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-paper hover:text-ink"
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-card hover:text-foreground"
                   >
                     <HugeiconsIcon icon={Delete02Icon} size={16} strokeWidth={1.6} aria-hidden />
                   </button>

@@ -175,7 +175,7 @@ export function AssistantChat({
 
   return (
     <div className="grid min-h-0 grid-rows-[minmax(0,1fr)_auto] gap-4">
-      <Conversation className="min-h-[24rem] rounded-3xl border border-border bg-paper">
+      <Conversation className="min-h-[24rem] rounded-3xl border border-border bg-card">
         <ConversationContent className="gap-6">
           {messages.length === 0 ? (
             <div className="mx-auto max-w-md py-12 text-center">
@@ -242,7 +242,7 @@ export function AssistantChat({
                   value={model}
                   onChange={(event) => setModel(event.target.value)}
                   aria-label="Choose the model that answers"
-                  className="max-w-[14rem] rounded-full border border-border bg-paper px-3 py-1.5 text-sm"
+                  className="max-w-[14rem] rounded-full border border-border bg-card px-3 py-1.5 text-sm"
                 >
                   {chatModels.map((item) => (
                     <option key={item.id} value={item.id}>{item.label}</option>

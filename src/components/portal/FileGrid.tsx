@@ -142,7 +142,7 @@ export function FileGrid({
             const isImage = (file.mime_type ?? "").startsWith("image/");
             return (
               <li key={file.id} className="overflow-hidden rounded-3xl border border-border">
-                <div className="flex aspect-[4/3] items-center justify-center bg-frost">
+                <div className="flex aspect-[4/3] items-center justify-center bg-muted">
                   {isImage && file.url ? (
                     <img
                       src={file.url}
@@ -214,7 +214,7 @@ export function FileGrid({
           })}
         </ul>
       ) : (
-        <p className="mt-6 rounded-3xl bg-frost p-6 text-muted-foreground">
+        <p className="mt-6 rounded-3xl bg-muted p-6 text-muted-foreground">
           {term.length > 0
             ? "No files match that search."
             : canUpload
@@ -395,7 +395,7 @@ function VersionList({
         return (
           <li
             key={version.id}
-            className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-2xl bg-frost px-3 py-2"
+            className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-2xl bg-muted px-3 py-2"
           >
             <span className="min-w-0">
               <span className="block truncate text-caption">

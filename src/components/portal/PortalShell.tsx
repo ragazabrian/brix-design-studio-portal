@@ -12,11 +12,13 @@ import {
   Message01Icon,
   Notification03Icon,
   Settings02Icon,
+  SidebarLeftIcon,
+  SidebarRightIcon,
   SparklesIcon,
   UserGroupIcon,
 } from "@hugeicons/core-free-icons";
 import { useQueryClient } from "@tanstack/react-query";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { studio } from "@/data/site";
 import { supabase } from "@/integrations/supabase/client";
@@ -52,7 +54,13 @@ const navItems: NavItem[] = [
   { to: "/admin", label: "Team", icon: UserGroupIcon, adminOnly: true },
 ];
 
-function NotificationsPanel({ onClose }: { onClose: () => void }) {
+function NotificationsPopover({
+  onClose,
+  collapsed,
+}: {
+  onClose: () => void;
+  collapsed: boolean;
+}) {
   const { user } = useSession();
   const { data: items } = useNotifications(user?.id);
   const queryClient = useQueryClient();
@@ -69,9 +77,11 @@ function NotificationsPanel({ onClose }: { onClose: () => void }) {
 
   return (
     <div
-      role="region"
+      role="dialog"
       aria-label="Notifications"
-      className="mt-2 rounded-2xl border border-border bg-background p-3"
+      className={`fixed bottom-6 left-4 z-[60] w-[19rem] max-w-[calc(100vw-2rem)] rounded-2xl border border-border bg-popover p-3 text-popover-foreground shadow-2xl lg:bottom-24 ${
+        collapsed ? "lg:left-[6rem]" : "lg:left-[17.5rem]"
+      }`}
     >
       <div className="flex items-center justify-between gap-2">
         <h2 className="label-caps text-muted-foreground">Notifications</h2>
@@ -117,6 +127,8 @@ function NotificationsPanel({ onClose }: { onClose: () => void }) {
   );
 }
 
+const COLLAPSE_KEY = "brix-portal-nav-collapsed";
+
 export function PortalShell({
   title,
   description,
@@ -143,7 +155,22 @@ export function PortalShell({
   const { user } = useSession();
   const { data: notifications } = useNotifications(user?.id);
   const [navOpen, setNavOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
   const [notifyOpen, setNotifyOpen] = useState(false);
+
+  // Remember the collapsed choice between visits.
+  useEffect(() => {
+    setCollapsed(window.localStorage.getItem(COLLAPSE_KEY) === "true");
+  }, []);
+
+  function toggleCollapsed() {
+    setCollapsed((value) => {
+      const next = !value;
+      window.localStorage.setItem(COLLAPSE_KEY, String(next));
+      return next;
+    });
+    setNotifyOpen(false);
+  }
 
   const unread = (notifications ?? []).filter((item) => !item.read_at).length;
 
@@ -164,7 +191,11 @@ export function PortalShell({
     "flex items-center gap-3 rounded-2xl px-3 py-2.5 text-[15px] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground";
 
   return (
-    <div className="min-h-screen bg-background text-foreground lg:grid lg:grid-cols-[16rem_minmax(0,1fr)]">
+    <div
+      className={`min-h-screen bg-background text-foreground lg:grid ${
+        collapsed ? "lg:grid-cols-[4.5rem_minmax(0,1fr)]" : "lg:grid-cols-[16rem_minmax(0,1fr)]"
+      }`}
+    >
       {/* Mobile menu button, kept out of a top bar on purpose. */}
       <button
         type="button"
@@ -191,14 +222,16 @@ export function PortalShell({
         id="portal-nav"
         className={`${
           navOpen ? "fixed inset-y-0 left-0 z-50 w-[17rem] overflow-y-auto" : "hidden"
-        } flex flex-col gap-6 border-border bg-card px-5 py-6 lg:sticky lg:top-0 lg:z-auto lg:flex lg:h-screen lg:w-auto lg:overflow-y-auto lg:border-r`}
+        } flex flex-col gap-6 border-border bg-card px-3 py-6 lg:sticky lg:top-0 lg:z-auto lg:flex lg:h-screen lg:w-auto lg:overflow-y-auto lg:overflow-x-visible lg:border-r ${
+          collapsed ? "lg:px-2" : "lg:px-5"
+        }`}
       >
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center justify-between gap-2 px-1">
           <Link
             to="/dashboard"
             aria-label={`${studio.shortName} portal home`}
             onClick={() => setNavOpen(false)}
-            className="flex items-center"
+            className={`flex items-center ${collapsed ? "lg:hidden" : ""}`}
           >
             <img
               src={resolvedTheme === "dark" ? wordmarkDark.url : wordmarkLight.url}
@@ -208,6 +241,21 @@ export function PortalShell({
               className="h-4 w-auto"
             />
           </Link>
+          <button
+            type="button"
+            onClick={toggleCollapsed}
+            aria-pressed={collapsed}
+            aria-label={collapsed ? "Expand the sidebar" : "Collapse the sidebar"}
+            title={collapsed ? "Expand the sidebar" : "Collapse the sidebar"}
+            className="hidden h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground lg:mx-auto lg:inline-flex"
+          >
+            <HugeiconsIcon
+              icon={collapsed ? SidebarRightIcon : SidebarLeftIcon}
+              size={18}
+              strokeWidth={1.6}
+              aria-hidden
+            />
+          </button>
           <button
             type="button"
             onClick={() => setNavOpen(false)}
@@ -225,42 +273,71 @@ export function PortalShell({
               to={item.to}
               onClick={() => setNavOpen(false)}
               activeProps={{ className: "bg-muted text-foreground" }}
-              className={linkClass}
+              className={`${linkClass} ${collapsed ? "lg:justify-center lg:px-0" : ""}`}
+              title={collapsed ? item.label : undefined}
             >
               <HugeiconsIcon icon={item.icon} size={18} strokeWidth={1.6} aria-hidden />
-              {item.label}
+              <span className={collapsed ? "lg:sr-only" : ""}>{item.label}</span>
             </Link>
           ))}
         </nav>
 
         <div className="mt-auto grid gap-1 border-t border-border pt-4">
-          <button
-            type="button"
-            onClick={() => setNotifyOpen((value) => !value)}
-            aria-expanded={notifyOpen}
-            className={`${linkClass} w-full text-left`}
-          >
-            <HugeiconsIcon icon={Notification03Icon} size={18} strokeWidth={1.6} aria-hidden />
-            <span className="flex-1">Notifications</span>
-            {unread > 0 ? (
-              <span className="min-w-5 rounded-full bg-primary px-1.5 py-0.5 text-center text-[11px] font-medium tabular-nums text-primary-foreground">
-                {unread}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setNotifyOpen((value) => !value)}
+              aria-expanded={notifyOpen}
+              aria-haspopup="dialog"
+              className={`${linkClass} w-full text-left ${collapsed ? "lg:justify-center lg:px-0" : ""}`}
+              title={collapsed ? "Notifications" : undefined}
+            >
+              <span className="relative">
+                <HugeiconsIcon icon={Notification03Icon} size={18} strokeWidth={1.6} aria-hidden />
+                {collapsed && unread > 0 ? (
+                  <span className="absolute -right-1.5 -top-1.5 hidden h-2 w-2 rounded-full bg-primary lg:block" />
+                ) : null}
               </span>
+              <span className={`flex-1 ${collapsed ? "lg:sr-only" : ""}`}>Notifications</span>
+              {unread > 0 ? (
+                <span
+                  className={`min-w-5 rounded-full bg-primary px-1.5 py-0.5 text-center text-[11px] font-medium tabular-nums text-primary-foreground ${
+                    collapsed ? "lg:hidden" : ""
+                  }`}
+                >
+                  {unread}
+                </span>
+              ) : null}
+            </button>
+            {notifyOpen ? (
+              <>
+                <button
+                  type="button"
+                  aria-label="Close notifications"
+                  onClick={() => setNotifyOpen(false)}
+                  className="fixed inset-0 z-50 cursor-default bg-transparent"
+                />
+                <NotificationsPopover onClose={() => setNotifyOpen(false)} collapsed={collapsed} />
+              </>
             ) : null}
-          </button>
-          {notifyOpen ? <NotificationsPanel onClose={() => setNotifyOpen(false)} /> : null}
+          </div>
 
           <Link
             to="/settings"
             onClick={() => setNavOpen(false)}
             activeProps={{ className: "bg-muted text-foreground" }}
-            className={linkClass}
+            className={`${linkClass} ${collapsed ? "lg:justify-center lg:px-0" : ""}`}
+            title={collapsed ? "Profile and settings" : undefined}
           >
             <HugeiconsIcon icon={Settings02Icon} size={18} strokeWidth={1.6} aria-hidden />
-            Profile and settings
+            <span className={collapsed ? "lg:sr-only" : ""}>Profile and settings</span>
           </Link>
 
-          <div className="mt-2 flex items-center gap-3 rounded-2xl bg-muted px-3 py-2.5">
+          <div
+            className={`mt-2 flex items-center gap-3 rounded-2xl bg-muted px-3 py-2.5 ${
+              collapsed ? "lg:flex-col lg:gap-2 lg:px-1" : ""
+            }`}
+          >
             {avatarUrl ? (
               <img
                 src={avatarUrl}
@@ -275,7 +352,7 @@ export function PortalShell({
                 className="h-9 w-9 shrink-0 rounded-full bg-background object-cover"
               />
             ) : null}
-            <div className="min-w-0 flex-1">
+            <div className={`min-w-0 flex-1 ${collapsed ? "lg:hidden" : ""}`}>
               <p className="truncate text-[14px] font-medium">{profileName ?? "Your account"}</p>
               {role ? <p className="text-caption text-muted-foreground">{roleLabel[role]}</p> : null}
             </div>
@@ -283,7 +360,8 @@ export function PortalShell({
               type="button"
               onClick={signOut}
               aria-label="Sign out"
-              className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border transition-colors hover:bg-background"
+              title="Sign out"
+              className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border transition-colors hover:bg-background"
             >
               <HugeiconsIcon icon={Logout01Icon} size={16} strokeWidth={1.6} aria-hidden />
             </button>

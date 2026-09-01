@@ -162,7 +162,7 @@ export function AssistantDock() {
         <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-2xl">
           <div className="flex items-center justify-between border-b border-border px-4 py-3">
             <div className="flex items-center gap-2">
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand text-paper">
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand text-accent-foreground">
                 <HugeiconsIcon icon={Message01Icon} size={16} strokeWidth={1.7} aria-hidden />
               </span>
               <div>
@@ -244,7 +244,7 @@ export function AssistantDock() {
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="ml-auto inline-flex items-center gap-2 rounded-full bg-brand px-4 py-3 text-sm font-medium text-paper shadow-xl transition-transform hover:-translate-y-0.5"
+          className="ml-auto inline-flex items-center gap-2 rounded-full bg-brand px-4 py-3 text-sm font-medium text-accent-foreground shadow-xl transition-transform hover:-translate-y-0.5"
         >
           <HugeiconsIcon icon={Message01Icon} size={18} strokeWidth={1.7} aria-hidden />
           Ask the assistant

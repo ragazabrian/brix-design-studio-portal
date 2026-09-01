@@ -79,7 +79,9 @@ function NotificationsPopover({
     <div
       role="dialog"
       aria-label="Notifications"
-      className="fixed bottom-6 left-4 z-[60] w-[19rem] max-w-[calc(100vw-2rem)] rounded-2xl border border-border bg-popover p-3 text-popover-foreground shadow-2xl sm:left-auto sm:right-auto lg:bottom-24 lg:left-[17.5rem]"
+      className={`fixed bottom-6 left-4 z-[60] w-[19rem] max-w-[calc(100vw-2rem)] rounded-2xl border border-border bg-popover p-3 text-popover-foreground shadow-2xl lg:bottom-24 ${
+        collapsed ? "lg:left-[6rem]" : "lg:left-[17.5rem]"
+      }`}
     >
       <div className="flex items-center justify-between gap-2">
         <h2 className="label-caps text-muted-foreground">Notifications</h2>
@@ -307,7 +309,7 @@ export function PortalShell({
                 </span>
               ) : null}
             </button>
-            {notifyOpen ? <NotificationsPopover onClose={() => setNotifyOpen(false)} /> : null}
+            {notifyOpen ? <NotificationsPopover onClose={() => setNotifyOpen(false)} collapsed={collapsed} /> : null}
           </div>
 
           <Link

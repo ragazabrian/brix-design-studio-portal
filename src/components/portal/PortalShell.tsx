@@ -73,7 +73,7 @@ function NotificationsPopover({ onClose }: { onClose: () => void }) {
     <div
       role="dialog"
       aria-label="Notifications"
-      className="absolute bottom-0 left-full z-50 ml-2 w-[19rem] max-w-[calc(100vw-2rem)] rounded-2xl border border-border bg-popover p-3 text-popover-foreground shadow-xl"
+      className="fixed bottom-6 left-4 z-[60] w-[19rem] max-w-[calc(100vw-2rem)] rounded-2xl border border-border bg-popover p-3 text-popover-foreground shadow-2xl sm:left-auto sm:right-auto lg:bottom-24 lg:left-[17.5rem]"
     >
       <div className="flex items-center justify-between gap-2">
         <h2 className="label-caps text-muted-foreground">Notifications</h2>

@@ -18,7 +18,7 @@ import { defaultChatModel } from "@/lib/chat-models";
 export const Route = createFileRoute("/_authenticated/assistant/$threadId")({
   head: () => ({
     meta: [
-      { title: "Studio assistant | Brix Client Portal" },
+      { title: "Studio assistant | Brix Design Studio" },
       { name: "robots", content: "noindex" },
       {
         name: "description",
@@ -77,33 +77,34 @@ function AssistantThreadPage() {
       profileName={profile?.full_name}
       avatarUrl={profile?.avatar_url}
       hideAssistantDock
+      immersive
     >
-      <div className="grid gap-6 lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-8">
-        <aside className="grid content-start gap-3">
+      <div className="grid h-full min-h-0 grid-rows-[auto_minmax(0,1fr)] lg:grid-cols-[15rem_minmax(0,1fr)] lg:grid-rows-1">
+        <aside className="flex min-w-0 items-center gap-2 overflow-x-auto border-b border-border bg-card p-3 lg:flex-col lg:items-stretch lg:overflow-y-auto lg:border-b-0 lg:border-r lg:p-4">
           <button
             type="button"
             onClick={startChat}
             disabled={createThread.isPending}
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
           >
             <HugeiconsIcon icon={PlusSignIcon} size={17} strokeWidth={1.8} aria-hidden />
             New chat
           </button>
 
-          <nav aria-label="Your chats" className="grid gap-1">
+          <nav aria-label="Your chats" className="flex gap-1 lg:grid">
             {(threads ?? []).map((item) => {
               const active = item.id === threadId;
               return (
                 <div
                   key={item.id}
-                  className={`grid grid-cols-[minmax(0,1fr)_auto] items-center gap-1 rounded-2xl px-1 ${
+                  className={`grid shrink-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-1 rounded-md px-1 ${
                     active ? "bg-muted" : ""
                   }`}
                 >
                   <Link
                     to="/assistant/$threadId"
                     params={{ threadId: item.id }}
-                    className="truncate rounded-2xl px-3 py-2.5 text-sm transition-colors hover:bg-muted"
+                    className="max-w-40 truncate rounded-md px-3 py-2.5 text-sm transition-colors hover:bg-muted lg:max-w-none"
                     aria-current={active ? "page" : undefined}
                   >
                     {item.title}
@@ -122,11 +123,11 @@ function AssistantThreadPage() {
           </nav>
         </aside>
 
-        <section aria-label="Conversation">
+        <section aria-label="Conversation" className="min-h-0 overflow-hidden">
           {threadPending || messagesPending ? (
             <p className="text-muted-foreground">Loading this chat.</p>
           ) : !thread ? (
-            <div className="rounded-3xl border border-border p-6">
+            <div className="m-6 rounded-lg border border-border p-6">
               <p className="font-medium">This chat is no longer here.</p>
               <p className="mt-2 text-caption text-muted-foreground">
                 It may have been deleted. Start a new one to keep going.

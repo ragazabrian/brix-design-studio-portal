@@ -24,7 +24,6 @@ import { studio } from "@/data/site";
 import { supabase } from "@/integrations/supabase/client";
 import { useNotifications, useSession, type AppRole } from "@/hooks/usePortal";
 import { useTheme } from "@/lib/theme";
-import { AssistantDock } from "@/components/portal/AssistantDock";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -146,6 +145,7 @@ export function PortalShell({
   avatarUrl,
   actions,
   hideAssistantDock,
+  immersive,
   children,
 }: {
   title: string;
@@ -156,6 +156,8 @@ export function PortalShell({
   actions?: ReactNode;
   /** Set on pages that already show the full assistant. */
   hideAssistantDock?: boolean | undefined;
+  /** Removes page framing for full-height tools such as chat. */
+  immersive?: boolean | undefined;
   children: ReactNode;
 }) {
   const navigate = useNavigate();
@@ -421,23 +423,32 @@ export function PortalShell({
 
       {/* Main column */}
       <div className="flex min-h-screen flex-col">
-        <main id="main" className="flex-1 px-5 pb-40 pt-16 md:px-8 lg:pt-10">
-          <div className="mx-auto w-full max-w-5xl">
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <div>
-                <h1 className="display-serif text-[clamp(1.75rem,4vw,2.5rem)]">{title}</h1>
-                {description ? (
-                  <p className="mt-3 max-w-2xl text-muted-foreground">{description}</p>
-                ) : null}
+        <main
+          id="main"
+          className={
+            immersive
+              ? "h-[100svh] min-h-0 flex-1 overflow-hidden"
+              : "flex-1 px-5 pb-40 pt-16 md:px-8 lg:pt-10"
+          }
+        >
+          {immersive ? (
+            children
+          ) : (
+            <div className="mx-auto w-full max-w-5xl">
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div>
+                  <h1 className="display-serif text-[clamp(1.75rem,4vw,2.5rem)]">{title}</h1>
+                  {description ? (
+                    <p className="mt-3 max-w-2xl text-muted-foreground">{description}</p>
+                  ) : null}
+                </div>
+                {actions ? <div className="flex items-center gap-2">{actions}</div> : null}
               </div>
-              {actions ? <div className="flex items-center gap-2">{actions}</div> : null}
+              <div className="mt-8">{children}</div>
             </div>
-            <div className="mt-8">{children}</div>
-          </div>
+          )}
         </main>
       </div>
-
-      {(role === "admin" || role === "designer") && !hideAssistantDock ? <AssistantDock /> : null}
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport, type UIMessage } from "ai";
+import { DefaultChatTransport, type PromptInputMessage, type UIMessage } from "ai";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
@@ -12,7 +12,6 @@ import {
   PromptInputActionAddAttachments,
   PromptInputActionMenu,
   PromptInputActionMenuContent,
-  
   PromptInputActionMenuTrigger,
   PromptInputFooter,
   PromptInputSubmit,
@@ -44,20 +43,32 @@ function AttachmentPreview() {
     <ul aria-label="Files attached to this message" className="flex gap-2 overflow-x-auto pb-1">
       {attachments.files.map((file) => (
         <li key={file.id} className="relative w-16 shrink-0">
-          <div className="flex aspect-square items-center justify-center overflow-hidden rounded-xl border border-border bg-muted">
-            {file.mediaType?.startsWith("image/") ? (
-              <img src={file.url} alt={`Preview of ${file.filename}`} className="h-full w-full object-cover" />
-            ) : (
-              <HugeiconsIcon icon={Attachment01Icon} size={21} strokeWidth={1.5} aria-hidden />
-            )}
-          </div>
+          <a
+            href={file.url}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={`Open preview of ${file.filename ?? "attached file"}`}
+            className="block rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <div className="flex aspect-square items-center justify-center overflow-hidden rounded-xl border border-border bg-muted">
+              {file.mediaType?.startsWith("image/") ? (
+                <img
+                  src={file.url}
+                  alt={`Preview of ${file.filename ?? "attached file"}`}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <HugeiconsIcon icon={Attachment01Icon} size={21} strokeWidth={1.5} aria-hidden />
+              )}
+            </div>
+          </a>
           <span className="mt-1 block truncate text-[10px] text-muted-foreground" title={file.filename}>
-            {file.filename}
+            {file.filename ?? "Attachment"}
           </span>
           <button
             type="button"
             onClick={() => attachments.remove(file.id)}
-            aria-label={`Remove ${file.filename}`}
+            aria-label={`Remove ${file.filename ?? "attached file"}`}
             className="absolute -right-1 -top-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-foreground text-background"
           >
             <HugeiconsIcon icon={Cancel01Icon} size={12} strokeWidth={2} aria-hidden />
@@ -85,7 +96,9 @@ export function AssistantDock() {
   const { data: initialMessages } = useChatMessages(activeThread?.id);
   const upload = useServerFn(uploadToStudioDrive);
   const [open, setOpen] = useState(false);
+  const [input, setInput] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const attachments = usePromptInputAttachments();
 
   const chat = useChat({
     id: activeThread?.id ?? "portal-assistant",
@@ -99,23 +112,30 @@ export function AssistantDock() {
     if (open) textareaRef.current?.focus();
   }, [open]);
 
-  async function submit(
-    message: { text?: string; files?: Array<{ url?: string; filename?: string; mediaType?: string }> },
-    event: React.FormEvent<HTMLFormElement>,
-  ) {
+  async function submit(message: PromptInputMessage, event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!activeThread || chat.status === "submitted" || chat.status === "streaming") return;
-    const text = (message.text ?? "").trim();
-    const files = (message.files ?? []).filter((item) => Boolean(item.url));
+    const text = message.text.trim();
+    const files = message.files.filter((item) => Boolean(item.url));
     if (!text && files.length === 0) return;
 
     const uploaded: string[] = [];
     for (const item of files) {
+      if (!item.url) continue;
       try {
-        const response = await fetch(item.url!);
+        const response = await fetch(item.url);
         const name = item.filename ?? "attachment";
-        const file = new File([await response.blob()], name, { type: item.mediaType ?? "application/octet-stream" });
-        const saved = await upload({ data: { name: file.name, mimeType: file.type, data: await fileToBase64(file), threadId: activeThread.id } });
+        const file = new File([await response.blob()], name, {
+          type: item.mediaType ?? "application/octet-stream",
+        });
+        const saved = await upload({
+          data: {
+            name: file.name,
+            mimeType: file.type,
+            data: await fileToBase64(file),
+            threadId: activeThread.id,
+          },
+        });
         uploaded.push(saved.name);
       } catch {
         toast.error(`${item.filename ?? "That file"} could not be saved to the studio drive.`);
@@ -124,6 +144,7 @@ export function AssistantDock() {
     }
 
     const attachmentNote = uploaded.length > 0 ? `\n\nAttached to this request: ${uploaded.join(", ")}.` : "";
+    setInput("");
     await chat.sendMessage({ text: `${text || "Please review the attached file."}${attachmentNote}` });
     textareaRef.current?.focus();
   }
@@ -145,27 +166,53 @@ export function AssistantDock() {
                 <p className="text-caption text-muted-foreground">Ask about this project</p>
               </div>
             </div>
-            <button type="button" onClick={() => setOpen(false)} aria-label="Close assistant" className="inline-flex h-9 w-9 items-center justify-center rounded-full hover:bg-muted">
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              aria-label="Close assistant"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full hover:bg-muted"
+            >
               <HugeiconsIcon icon={Cancel01Icon} size={18} strokeWidth={1.6} aria-hidden />
             </button>
           </div>
           <Conversation className="h-72 rounded-none border-0 bg-card">
             <ConversationContent className="gap-4 p-4">
-              {chat.messages.length === 0 ? <p className="py-8 text-center text-caption text-muted-foreground">Ask for a brief, a timeline, or a clear next step.</p> : null}
+              {chat.messages.length === 0 ? (
+                <p className="py-8 text-center text-caption text-muted-foreground">
+                  Ask for a brief, a timeline, or a clear next step.
+                </p>
+              ) : null}
               {chat.messages.map((message) => (
                 <Message key={message.id} from={message.role}>
                   <MessageContent>
-                    {message.parts.map((part, index) => part.type === "text" ? <MessageResponse key={index}>{part.text}</MessageResponse> : null)}
+                    {message.parts.map((part, index) =>
+                      part.type === "text" ? <MessageResponse key={index}>{part.text}</MessageResponse> : null,
+                    )}
                   </MessageContent>
                 </Message>
               ))}
-              {chat.status === "submitted" ? <Message from="assistant"><MessageContent><Shimmer>Thinking...</Shimmer></MessageContent></Message> : null}
+              {chat.status === "submitted" ? (
+                <Message from="assistant">
+                  <MessageContent><Shimmer>Thinking...</Shimmer></MessageContent>
+                </Message>
+              ) : null}
             </ConversationContent>
           </Conversation>
           <div className="border-t border-border p-3">
-            <PromptInput onSubmit={submit} maxFiles={10} maxFileSize={20 * 1024 * 1024} onError={(error) => toast.error(error.message)}>
+            <PromptInput
+              onSubmit={submit}
+              maxFiles={10}
+              maxFileSize={20 * 1024 * 1024}
+              onError={(error) => toast.error(error.message)}
+            >
               <AttachmentPreview />
-              <PromptInputTextarea ref={textareaRef} placeholder="Ask the studio assistant" aria-label="Message the studio assistant" />
+              <PromptInputTextarea
+                ref={textareaRef}
+                value={input}
+                onChange={(event) => setInput(event.target.value)}
+                placeholder="Ask the studio assistant"
+                aria-label="Message the studio assistant"
+              />
               <PromptInputFooter>
                 <PromptInputActionMenu>
                   <PromptInputActionMenuTrigger tooltip="Attach a file" />
@@ -173,14 +220,28 @@ export function AssistantDock() {
                     <PromptInputActionAddAttachments label="Attach from your device" />
                   </PromptInputActionMenuContent>
                 </PromptInputActionMenu>
-                <PromptInputSubmit status={chat.status} onStop={() => void chat.stop()} />
+                <PromptInputSubmit
+                  status={chat.status}
+                  disabled={!busy && !input.trim() && attachments.files.length === 0}
+                  onStop={() => void chat.stop()}
+                />
               </PromptInputFooter>
             </PromptInput>
           </div>
-          <button type="button" onClick={() => navigate({ to: "/assistant/$threadId", params: { threadId: activeThread.id } })} className="w-full border-t border-border px-4 py-2 text-center text-caption text-muted-foreground hover:text-foreground">Open full assistant</button>
+          <button
+            type="button"
+            onClick={() => navigate({ to: "/assistant/$threadId", params: { threadId: activeThread.id } })}
+            className="w-full border-t border-border px-4 py-2 text-center text-caption text-muted-foreground hover:text-foreground"
+          >
+            Open full assistant
+          </button>
         </div>
       ) : (
-        <button type="button" onClick={() => setOpen(true)} className="ml-auto inline-flex items-center gap-2 rounded-full bg-brand px-4 py-3 text-sm font-medium text-paper shadow-xl transition-transform hover:-translate-y-0.5">
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className="ml-auto inline-flex items-center gap-2 rounded-full bg-brand px-4 py-3 text-sm font-medium text-paper shadow-xl transition-transform hover:-translate-y-0.5"
+        >
           <HugeiconsIcon icon={Message01Icon} size={18} strokeWidth={1.7} aria-hidden />
           Ask the assistant
         </button>

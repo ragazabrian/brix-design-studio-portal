@@ -17,12 +17,12 @@ export const Route = createFileRoute("/portal")({
       {
         name: "description",
         content:
-          "Sign in to the Brix Design Studio Client Portal with Google or email to reach your files, guidelines, tasks and hours.",
+          "Sign in to the Brix Design Studio Client Portal with Google or email to reach your files, guidelines and tasks.",
       },
       { property: "og:title", content: "Sign in to the Brix Client Portal" },
       {
         property: "og:description",
-        content: "Reach your files, guidelines, tasks and hours in the Brix Client Portal.",
+        content: "Reach your files, guidelines and tasks in the Brix Client Portal.",
       },
       { name: "robots", content: "noindex" },
     ],
@@ -151,7 +151,7 @@ function PortalAuthPage() {
           </h1>
           <p className="mx-auto mt-3 max-w-[34ch] text-center text-sm text-paper/55">
             {signingIn
-              ? "Sign in to reach your files, guidelines, tasks and logged hours."
+              ? "Sign in to reach your files, guidelines and tasks."
               : "Use your work email so we can match you to the right projects."}
           </p>
 

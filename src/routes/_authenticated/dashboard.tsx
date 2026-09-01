@@ -123,7 +123,7 @@ function DashboardPage() {
           type="search"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Projects, tasks, hours or files"
+          placeholder="Projects, tasks or files"
           className="w-full rounded-3xl border border-input bg-paper px-5 py-3 text-[15px] placeholder:text-muted-foreground"
         />
         <p className="mt-2 text-caption text-muted-foreground">
@@ -217,7 +217,7 @@ function DashboardPage() {
             </>
           ) : (
             <p className="rounded-3xl bg-frost p-6 text-muted-foreground">
-              Select a project to see its files, tasks and hours.
+              Select a project to see its files and tasks.
             </p>
           )}
         </div>

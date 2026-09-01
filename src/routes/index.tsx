@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 import heroImage from "@/assets/hero-studio.jpg";
 import ctaImage from "@/assets/cta-collaborate.jpg";
@@ -13,6 +13,9 @@ import { NewsAccordionItem } from "@/components/site/NewsAccordionItem";
 import { CTABanner } from "@/components/site/CTABanner";
 
 export const Route = createFileRoute("/")({
+  beforeLoad: () => {
+    throw redirect({ to: "/portal" });
+  },
   head: () => ({
     meta: [
       { title: "Brix Design Studio: Brand and Design for Growing Companies" },

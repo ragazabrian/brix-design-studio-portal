@@ -12,7 +12,7 @@ import {
   PromptInputActionAddAttachments,
   PromptInputActionMenu,
   PromptInputActionMenuContent,
-  PromptInputActionMenuItem,
+  
   PromptInputActionMenuTrigger,
   PromptInputFooter,
   PromptInputSubmit,
@@ -168,7 +168,7 @@ export function AssistantDock() {
                     <PromptInputActionAddAttachments label="Attach from your device" />
                   </PromptInputActionMenuContent>
                 </PromptInputActionMenu>
-                <PromptInputSubmit status={chat.status} disabled={!busy && chat.messages.at(-1)?.role === "user" && false} onStop={() => void chat.stop()} />
+                <PromptInputSubmit status={chat.status} onStop={() => void chat.stop()} />
               </PromptInputFooter>
             </PromptInput>
           </div>

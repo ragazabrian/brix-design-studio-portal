@@ -22,7 +22,7 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
     meta: [
       { title: "Your projects | Brix Client Portal" },
       { name: "robots", content: "noindex" },
-      { name: "description", content: "Your Brix Client Portal projects, files, tasks and hours." },
+      { name: "description", content: "Your Brix Client Portal projects, files and tasks." },
     ],
   }),
   component: DashboardPage,

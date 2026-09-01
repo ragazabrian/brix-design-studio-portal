@@ -129,16 +129,9 @@ function PortalAuthPage() {
     <main className="h-svh overflow-hidden bg-obsidian text-paper lg:grid lg:grid-cols-2">
       {/* Form side */}
       <div className="relative flex h-svh flex-col overflow-y-auto px-5 py-6 sm:px-10 lg:h-full lg:px-14 xl:px-20">
-        <div className="flex shrink-0 items-center justify-between">
+        <div className="flex shrink-0 items-center">
           <Link to="/" className="inline-flex items-center gap-3" aria-label="Brix Design Studio home">
             <img src={wordmarkDark.url} alt="Brix Design Studio" className="h-4 w-auto" />
-          </Link>
-          <Link
-            to="/"
-            className="label-caps inline-flex items-center gap-2 text-paper/60 transition-colors hover:text-paper"
-          >
-            <HugeiconsIcon icon={ArrowLeft01Icon} size={16} strokeWidth={1.7} aria-hidden />
-            Back to site
           </Link>
         </div>
 

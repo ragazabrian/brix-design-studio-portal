@@ -157,7 +157,9 @@
   --muted: oklch(0.12 0 0);
   --muted-foreground: oklch(0.68 0 0);
   --accent: var(--brand);
-  --accent-foreground: var(--paper);
+  --accent-foreground: oklch(0.98 0 0);
+  --destructive: oklch(0.62 0.21 25);
+  --destructive-foreground: oklch(0.98 0 0);
   --border: oklch(1 0 0 / 14%);
   --input: oklch(1 0 0 / 22%);
   --ring: var(--brand);

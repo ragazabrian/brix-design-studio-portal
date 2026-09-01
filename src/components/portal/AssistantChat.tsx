@@ -174,11 +174,11 @@ export function AssistantChat({
   }
 
   return (
-    <div className="grid min-h-0 grid-rows-[minmax(0,1fr)_auto] gap-4">
-      <Conversation className="min-h-[24rem] rounded-3xl border border-border bg-card">
-        <ConversationContent className="gap-6">
+    <div className="grid h-full min-h-0 grid-rows-[minmax(0,1fr)_auto] bg-background">
+      <Conversation className="min-h-0 bg-background">
+        <ConversationContent className="mx-auto w-full max-w-3xl gap-7 px-5 py-8 md:px-8">
           {messages.length === 0 ? (
-            <div className="mx-auto max-w-md py-12 text-center">
+            <div className="mx-auto flex min-h-[55vh] max-w-md flex-col items-center justify-center text-center">
               <img src={brixMark.url} alt="Brix Design Studio" width={1939} height={573} className="mx-auto h-5 w-auto" />
               <p className="mt-5 text-[17px] font-medium">Ask about your projects</p>
               <p className="mt-2 text-caption text-muted-foreground">
@@ -213,51 +213,57 @@ export function AssistantChat({
         <ConversationScrollButton />
       </Conversation>
 
-      <div className="grid gap-3">
-        <PromptInput
-          onSubmit={handleSubmit}
-          maxFiles={10}
-          maxFileSize={20 * 1024 * 1024}
-          onError={(error) => toast.error(error.message)}
-        >
-          <AttachmentPreview onFilesChange={setAttachmentCount} />
-          <PromptInputTextarea
-            ref={textareaRef}
-            value={input}
-            onChange={(event) => setInput(event.target.value)}
-            placeholder="Ask the studio assistant"
-            aria-label="Message the studio assistant"
-          />
-          <PromptInputFooter className="justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <PromptInputActionMenu>
-                <PromptInputActionMenuTrigger tooltip="Attach a file" />
-                <PromptInputActionMenuContent>
-                  <PromptInputActionAddAttachments label="Attach from your device" />
-                </PromptInputActionMenuContent>
-              </PromptInputActionMenu>
-              <label className="flex items-center gap-2 text-caption text-muted-foreground">
-                <span className="sr-only sm:not-sr-only">Model</span>
-                <select
-                  value={model}
-                  onChange={(event) => setModel(event.target.value)}
-                  aria-label="Choose the model that answers"
-                  className="max-w-[14rem] rounded-full border border-border bg-card px-3 py-1.5 text-sm"
-                >
-                  {chatModels.map((item) => (
-                    <option key={item.id} value={item.id}>{item.label}</option>
-                  ))}
-                </select>
-              </label>
-            </div>
-            <PromptInputSubmit
-              status={status}
-              disabled={!busy && !input.trim() && attachmentCount === 0}
-              onClick={busy ? () => void stop() : undefined}
+      <div className="border-t border-border bg-background/95 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur md:px-8">
+        <div className="mx-auto grid w-full max-w-3xl gap-2">
+          <PromptInput
+            onSubmit={handleSubmit}
+            maxFiles={10}
+            maxFileSize={20 * 1024 * 1024}
+            onError={(error) => toast.error(error.message)}
+            className="rounded-2xl border-border bg-card shadow-lg"
+          >
+            <AttachmentPreview onFilesChange={setAttachmentCount} />
+            <PromptInputTextarea
+              ref={textareaRef}
+              value={input}
+              onChange={(event) => setInput(event.target.value)}
+              placeholder="Message Brix"
+              aria-label="Message the studio assistant"
+              className="min-h-20"
             />
-          </PromptInputFooter>
-        </PromptInput>
-        <p className="text-caption text-muted-foreground">{findChatModel(model).note}</p>
+            <PromptInputFooter className="justify-between gap-3">
+              <div className="flex min-w-0 items-center gap-2">
+                <PromptInputActionMenu>
+                  <PromptInputActionMenuTrigger tooltip="Attach a file" />
+                  <PromptInputActionMenuContent side="top" align="start" className="z-[90]">
+                    <PromptInputActionAddAttachments label="Attach from your device" />
+                  </PromptInputActionMenuContent>
+                </PromptInputActionMenu>
+                <label className="min-w-0 text-caption text-muted-foreground">
+                  <span className="sr-only">Model</span>
+                  <select
+                    value={model}
+                    onChange={(event) => setModel(event.target.value)}
+                    aria-label="Choose the model that answers"
+                    className="max-w-[12rem] truncate rounded-md border-0 bg-transparent px-2 py-1.5 text-sm text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  >
+                    {chatModels.map((item) => (
+                      <option key={item.id} value={item.id}>{item.label}</option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+              <PromptInputSubmit
+                status={status}
+                disabled={!busy && !input.trim() && attachmentCount === 0}
+                onStop={() => void stop()}
+              />
+            </PromptInputFooter>
+          </PromptInput>
+          <p className="px-2 text-center text-caption text-muted-foreground">
+            {findChatModel(model).note}
+          </p>
+        </div>
       </div>
     </div>
   );

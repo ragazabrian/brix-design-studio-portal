@@ -8,7 +8,7 @@ import { useChatThreads, useCreateChatThread } from "@/hooks/useAssistant";
 export const Route = createFileRoute("/_authenticated/assistant/")({
   head: () => ({
     meta: [
-      { title: "Studio assistant | Brix Client Portal" },
+      { title: "Studio assistant | Brix Design Studio" },
       { name: "robots", content: "noindex" },
       {
         name: "description",

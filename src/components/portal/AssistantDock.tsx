@@ -1,5 +1,5 @@
 import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport, type PromptInputMessage, type UIMessage } from "ai";
+import { DefaultChatTransport, type UIMessage } from "ai";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
@@ -17,6 +17,8 @@ import {
   PromptInputSubmit,
   PromptInputTextarea,
   usePromptInputAttachments,
+  type PromptInputMessage,
+
 } from "@/components/ai-elements/prompt-input";
 import { Conversation, ConversationContent } from "@/components/ai-elements/conversation";
 import { Message, MessageContent, MessageResponse } from "@/components/ai-elements/message";
@@ -121,9 +123,10 @@ export function AssistantDock() {
 
     const uploaded: string[] = [];
     for (const item of files) {
-      if (!item.url) continue;
+      const url = item.url;
+      if (!url) continue;
       try {
-        const response = await fetch(item.url);
+        const response = await fetch(url);
         const name = item.filename ?? "attachment";
         const file = new File([await response.blob()], name, {
           type: item.mediaType ?? "application/octet-stream",

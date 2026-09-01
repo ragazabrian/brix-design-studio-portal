@@ -1,5 +1,5 @@
 import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport, type PromptInputMessage, type UIMessage } from "ai";
+import { DefaultChatTransport, type UIMessage } from "ai";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
@@ -23,6 +23,8 @@ import {
   PromptInputSubmit,
   PromptInputTextarea,
   usePromptInputAttachments,
+  type PromptInputMessage,
+
 } from "@/components/ai-elements/prompt-input";
 import { Shimmer } from "@/components/ai-elements/shimmer";
 import { uploadToStudioDrive } from "@/lib/drive.functions";
@@ -141,9 +143,10 @@ export function AssistantChat({
 
     const uploaded: string[] = [];
     for (const item of files) {
-      if (!item.url) continue;
+      const url = item.url;
+      if (!url) continue;
       try {
-      const response = await fetch(item.url);
+        const response = await fetch(url);
         const name = item.filename ?? "attachment";
         const file = new File([await response.blob()], name, {
           type: item.mediaType ?? "application/octet-stream",

@@ -126,7 +126,7 @@ function PortalAuthPage() {
   const signingIn = mode === "signin";
 
   return (
-    <main className="h-svh overflow-hidden bg-obsidian text-paper lg:grid lg:grid-cols-2">
+    <main className="portal-auth-theme h-svh overflow-hidden bg-obsidian text-paper lg:grid lg:grid-cols-2">
       {/* Form side */}
       <div className="relative flex h-svh flex-col overflow-y-auto px-5 py-6 sm:px-10 lg:h-full lg:px-14 xl:px-20">
         <div className="flex shrink-0 items-center">
@@ -248,7 +248,7 @@ function PortalAuthPage() {
           height={1536}
           className="h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-obsidian/85 via-obsidian/10 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-obsidian/85 via-obsidian/10 to-transparent" />
         <div className="absolute inset-x-10 bottom-10">
           <p className="display-serif max-w-[24ch] text-[clamp(1.5rem,2.2vw,2rem)] text-paper">
             Every file, decision and hour, kept in one place your team can find.

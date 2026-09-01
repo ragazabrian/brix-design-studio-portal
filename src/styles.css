@@ -134,6 +134,16 @@
 }
 
 .dark {
+  /* Flip the named brand surfaces so every ink/paper/frost usage follows dark mode. */
+  --ink: oklch(0.98 0 0);
+  --paper: oklch(0 0 0);
+  --frost: oklch(0.14 0 0);
+  --stone: oklch(0.68 0 0);
+  --obsidian: oklch(1 0 0);
+  --brand: oklch(0.62 0.19 264.6);
+  --brand-deep: oklch(0.52 0.22 264.6);
+  --brand-soft: oklch(0.2 0.05 264.6);
+
   --background: oklch(0 0 0);
   --foreground: oklch(0.98 0 0);
   --card: oklch(0.08 0 0);

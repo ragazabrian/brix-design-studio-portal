@@ -91,7 +91,7 @@ function DashboardPage() {
     >
       <section
         aria-labelledby="assistant-heading"
-        className="mb-10 grid gap-4 rounded-3xl bg-frost p-6 md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:p-8"
+        className="mb-10 grid gap-4 rounded-3xl bg-muted p-6 md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:p-8"
       >
         <div>
           <h2 id="assistant-heading" className="text-[19px] font-medium">
@@ -104,7 +104,7 @@ function DashboardPage() {
         </div>
         <Link
           to="/assistant"
-          className="inline-flex items-center justify-center rounded-full bg-ink px-5 py-2.5 text-sm text-paper transition-opacity hover:opacity-90"
+          className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm text-primary-foreground transition-opacity hover:opacity-90"
         >
           Open assistant
         </Link>
@@ -124,7 +124,7 @@ function DashboardPage() {
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="Projects, tasks or files"
-          className="w-full rounded-3xl border border-input bg-paper px-5 py-3 text-[15px] placeholder:text-muted-foreground"
+          className="w-full rounded-3xl border border-input bg-card px-5 py-3 text-[15px] placeholder:text-muted-foreground"
         />
         <p className="mt-2 text-caption text-muted-foreground">
           Filters the project list and everything shown for the selected project.
@@ -149,13 +149,13 @@ function DashboardPage() {
                     onClick={() => setActiveId(project.id)}
                     aria-current={project.id === activeId}
                     className={`w-full rounded-2xl px-4 py-3 text-left transition-colors ${
-                      project.id === activeId ? "bg-ink text-paper" : "bg-frost hover:bg-frost/70"
+                      project.id === activeId ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-muted/70"
                     }`}
                   >
                     <span className="block truncate text-[15px] font-medium">{project.name}</span>
                     <span
                       className={`mt-0.5 block text-caption ${
-                        project.id === activeId ? "text-paper/70" : "text-muted-foreground"
+                        project.id === activeId ? "text-primary-foreground/70" : "text-muted-foreground"
                       }`}
                     >
                       {statusLabel[project.status] ?? project.status}
@@ -165,7 +165,7 @@ function DashboardPage() {
               ))}
             </ul>
           ) : (
-            <p className="mt-4 rounded-3xl bg-frost p-5 text-muted-foreground">
+            <p className="mt-4 rounded-3xl bg-muted p-5 text-muted-foreground">
               {term.length > 0
                 ? "No projects match that search."
                 : isStaff
@@ -180,7 +180,7 @@ function DashboardPage() {
         <div className="space-y-12">
           {activeProject ? (
             <>
-              <section className="rounded-3xl bg-frost p-6 md:p-8">
+              <section className="rounded-3xl bg-muted p-6 md:p-8">
                 <h2 className="font-display text-2xl">{activeProject.name}</h2>
                 {activeProject.client_name ? (
                   <p className="mt-1 text-muted-foreground">{activeProject.client_name}</p>
@@ -216,7 +216,7 @@ function DashboardPage() {
               <ActivityLog projectId={activeProject.id} />
             </>
           ) : (
-            <p className="rounded-3xl bg-frost p-6 text-muted-foreground">
+            <p className="rounded-3xl bg-muted p-6 text-muted-foreground">
               Select a project to see its files and tasks.
             </p>
           )}
@@ -259,7 +259,7 @@ function Onboarding({
   }
 
   const field =
-    "w-full rounded-3xl border border-input bg-paper px-5 py-3 text-[15px] placeholder:text-muted-foreground";
+    "w-full rounded-3xl border border-input bg-card px-5 py-3 text-[15px] placeholder:text-muted-foreground";
 
   return (
     <PortalShell
@@ -339,7 +339,7 @@ function NewProjectButton({
       type="button"
       onClick={create}
       disabled={busy}
-      className="rounded-full border border-border px-3 py-1.5 text-sm transition-colors hover:bg-frost disabled:opacity-60"
+      className="rounded-full border border-border px-3 py-1.5 text-sm transition-colors hover:bg-muted disabled:opacity-60"
     >
       New
     </button>
@@ -408,7 +408,7 @@ function Tasks({
           <button
             type="button"
             onClick={addTask}
-            className="rounded-full border border-border px-4 py-2 text-sm transition-colors hover:bg-frost"
+            className="rounded-full border border-border px-4 py-2 text-sm transition-colors hover:bg-muted"
           >
             Add task
           </button>
@@ -430,7 +430,7 @@ function Tasks({
                 <button
                   type="button"
                   onClick={() => advance(task.id, task.status)}
-                  className="rounded-full border border-border px-3 py-1.5 text-sm transition-colors hover:bg-frost"
+                  className="rounded-full border border-border px-3 py-1.5 text-sm transition-colors hover:bg-muted"
                 >
                   Move on
                 </button>
@@ -439,7 +439,7 @@ function Tasks({
           ))}
         </ul>
       ) : (
-        <p className="mt-6 rounded-3xl bg-frost p-6 text-muted-foreground">
+        <p className="mt-6 rounded-3xl bg-muted p-6 text-muted-foreground">
           {term.length > 0 ? "No tasks match that search." : "Nothing on the board yet."}
         </p>
       )}
@@ -468,7 +468,7 @@ function ActivityLog({ projectId }: { projectId: string }) {
           ))}
         </ol>
       ) : (
-        <p className="mt-6 rounded-3xl bg-frost p-6 text-muted-foreground">
+        <p className="mt-6 rounded-3xl bg-muted p-6 text-muted-foreground">
           Uploads, file updates and restores will be listed here.
         </p>
       )}

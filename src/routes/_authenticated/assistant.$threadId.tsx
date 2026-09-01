@@ -84,7 +84,7 @@ function AssistantThreadPage() {
             type="button"
             onClick={startChat}
             disabled={createThread.isPending}
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-ink px-4 py-2.5 text-sm text-paper transition-opacity hover:opacity-90 disabled:opacity-50"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
           >
             <HugeiconsIcon icon={PlusSignIcon} size={17} strokeWidth={1.8} aria-hidden />
             New chat

@@ -118,7 +118,7 @@ export function AssistantDock() {
         const saved = await upload({ data: { name: file.name, mimeType: file.type, data: await fileToBase64(file), threadId: activeThread.id } });
         uploaded.push(saved.name);
       } catch {
-        toast.error(`${item.filename} could not be saved to the studio drive.`);
+        toast.error(`${item.filename ?? "That file"} could not be saved to the studio drive.`);
         return;
       }
     }

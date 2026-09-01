@@ -83,7 +83,7 @@ function DashboardPage() {
 
   return (
     <PortalShell
-      title={`Welcome back${profile?.full_name ? `, ${profile.full_name.split(" ")[0]}` : ""}`}
+      title="Dashboard"
       description="Everything we are making for you, with the latest files, tasks and next steps in one place."
       role={role}
       profileName={profile?.full_name}

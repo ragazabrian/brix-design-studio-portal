@@ -13,17 +13,19 @@ import authPanel from "@/assets/auth-panel.jpg";
 export const Route = createFileRoute("/portal")({
   head: () => ({
     meta: [
-      { title: "Sign in to the Brix Client Portal" },
+      { title: "Sign in | Brix Design Studio" },
       {
         name: "description",
         content:
-          "Sign in to the Brix Design Studio Client Portal with Google or email to reach your files, guidelines and tasks.",
+          "Sign in to Brix Design Studio with Google or email to reach your files, guidelines and tasks.",
       },
-      { property: "og:title", content: "Sign in to the Brix Client Portal" },
+      { property: "og:title", content: "Sign in | Brix Design Studio" },
       {
         property: "og:description",
-        content: "Reach your files, guidelines and tasks in the Brix Client Portal.",
+        content: "Reach your Brix project files, guidelines and tasks.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
     ],
   }),
@@ -258,7 +260,7 @@ function PortalAuthPage() {
           <p className="display-serif max-w-[24ch] text-[clamp(1.5rem,2.2vw,2rem)] text-paper">
             Every file, decision and hour, kept in one place your team can find.
           </p>
-          <p className="mt-3 text-[15px] text-paper/70">Brix Client Portal</p>
+          <p className="mt-3 text-[15px] text-paper/70">Project workspace</p>
         </div>
       </div>
     </main>

@@ -76,6 +76,7 @@ function AssistantThreadPage() {
       role={role}
       profileName={profile?.full_name}
       avatarUrl={profile?.avatar_url}
+      hideAssistantDock
     >
       <div className="grid gap-6 lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-8">
         <aside className="grid content-start gap-3">

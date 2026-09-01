@@ -52,7 +52,7 @@ const navItems: NavItem[] = [
   { to: "/admin", label: "Team", icon: UserGroupIcon, adminOnly: true },
 ];
 
-function NotificationsPanel({ onClose }: { onClose: () => void }) {
+function NotificationsPopover({ onClose }: { onClose: () => void }) {
   const { user } = useSession();
   const { data: items } = useNotifications(user?.id);
   const queryClient = useQueryClient();

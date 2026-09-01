@@ -1,14 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { toast } from "sonner";
 
 import { PortalShell } from "@/components/portal/PortalShell";
 import { PillButton } from "@/components/site/Primitives";
 import { supabase } from "@/integrations/supabase/client";
+import { createPortalInvitation } from "@/lib/invitations.functions";
 import {
   useInvitations,
   useProfile,
+  useProjects,
   useRoles,
   useSession,
   useTeam,
@@ -45,7 +48,9 @@ function AdminPage() {
 
   const { data: team } = useTeam(isAdmin);
   const { data: invitations } = useInvitations(isAdmin);
+  const { data: projects } = useProjects();
   const queryClient = useQueryClient();
+  const sendInvitation = useServerFn(createPortalInvitation);
   const [busy, setBusy] = useState(false);
 
   async function invite(event: React.FormEvent<HTMLFormElement>) {
@@ -53,20 +58,24 @@ function AdminPage() {
     const form = event.currentTarget;
     const data = new FormData(form);
     setBusy(true);
-    const { error } = await supabase.from("invitations").insert({
-      email: String(data.get("email") ?? "").trim().toLowerCase(),
-      role: String(data.get("role") ?? "client") as AppRole,
-      note: String(data.get("note") ?? "") || null,
-      invited_by: user!.id,
-    });
-    setBusy(false);
-    if (error) {
-      toast.error("That invite was not saved. Check the email address and try again.");
+    try {
+      await sendInvitation({
+        data: {
+          email: String(data.get("email") ?? ""),
+          role: String(data.get("role") ?? "client") as AppRole,
+          note: String(data.get("note") ?? "") || undefined,
+          projectIds: data.getAll("projectIds").map(String),
+        },
+      });
+    } catch (error) {
+      setBusy(false);
+      toast.error(error instanceof Error ? error.message : "The invitation could not be sent.");
       return;
     }
+    setBusy(false);
     form.reset();
     await queryClient.invalidateQueries({ queryKey: ["invitations"] });
-    toast.success("Invite saved. Share the portal link with them to finish sign in.");
+    toast.success("Invitation sent with a secure acceptance link.");
   }
 
   async function setRole(userId: string, role: AppRole) {
@@ -172,6 +181,19 @@ function AdminPage() {
                 ))}
               </select>
             </div>
+            <fieldset>
+              <legend className="label-caps mb-2 text-muted-foreground">Client projects</legend>
+              <div className="max-h-48 space-y-1 overflow-y-auto border-y border-border py-2">
+                {(projects ?? []).map((project) => (
+                  <label key={project.id} className="flex cursor-pointer items-center gap-3 px-2 py-2 text-sm hover:bg-muted">
+                    <input type="checkbox" name="projectIds" value={project.id} className="h-4 w-4 accent-accent" />
+                    <span className="truncate">{project.name}</span>
+                  </label>
+                ))}
+                {projects?.length === 0 ? <p className="px-2 py-2 text-caption text-muted-foreground">Create a project before inviting a client.</p> : null}
+              </div>
+              <p className="mt-2 text-caption text-muted-foreground">Required for clients. Staff roles can access every project.</p>
+            </fieldset>
             <div>
               <label htmlFor="note" className="label-caps mb-2 block text-muted-foreground">
                 Note (optional)
@@ -179,7 +201,7 @@ function AdminPage() {
               <input id="note" name="note" className={field} placeholder="Which project they join" />
             </div>
             <PillButton type="submit" disabled={busy} className="disabled:opacity-60">
-              {busy ? "Saving" : "Save invite"}
+              {busy ? "Sending" : "Send invitation"}
             </PillButton>
           </form>
 

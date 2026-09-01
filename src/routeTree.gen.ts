@@ -13,12 +13,15 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as ArchiveRouteImport } from './routes/archive'
+import { Route as ClientLoginRouteImport } from './routes/client-login'
 import { Route as ClientPortalRouteImport } from './routes/client-portal'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as InviteRouteImport } from './routes/invite'
 import { Route as NewsRouteImport } from './routes/news'
 import { Route as PortalRouteImport } from './routes/portal'
 import { Route as WorkRouteImport } from './routes/work'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedClientRouteRouteImport } from './routes/_authenticated/client/route'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDesignRouteImport } from './routes/_authenticated/design'
 import { Route as AuthenticatedDocumentsRouteImport } from './routes/_authenticated/documents'
@@ -34,6 +37,12 @@ import { Route as WorkIndexRouteImport } from './routes/work.index'
 import { Route as WorkSlugRouteImport } from './routes/work.$slug'
 import { Route as AuthenticatedAssistantIndexRouteImport } from './routes/_authenticated/assistant.index'
 import { Route as AuthenticatedAssistantThreadIdRouteImport } from './routes/_authenticated/assistant.$threadId'
+import { Route as AuthenticatedClientDashboardRouteImport } from './routes/_authenticated/client/dashboard'
+import { Route as AuthenticatedClientDocumentsRouteImport } from './routes/_authenticated/client/documents'
+import { Route as AuthenticatedClientGuidelinesRouteImport } from './routes/_authenticated/client/guidelines'
+import { Route as AuthenticatedClientLibraryRouteImport } from './routes/_authenticated/client/library'
+import { Route as AuthenticatedClientModulesRouteImport } from './routes/_authenticated/client/modules'
+import { Route as AuthenticatedClientPhasesRouteImport } from './routes/_authenticated/client/phases'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -54,6 +63,11 @@ const ArchiveRoute = ArchiveRouteImport.update({
   path: '/archive',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ClientLoginRoute = ClientLoginRouteImport.update({
+  id: '/client-login',
+  path: '/client-login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ClientPortalRoute = ClientPortalRouteImport.update({
   id: '/client-portal',
   path: '/client-portal',
@@ -62,6 +76,11 @@ const ClientPortalRoute = ClientPortalRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InviteRoute = InviteRouteImport.update({
+  id: '/invite',
+  path: '/invite',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NewsRoute = NewsRouteImport.update({
@@ -84,6 +103,12 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedClientRouteRoute =
+  AuthenticatedClientRouteRouteImport.update({
+    id: '/client',
+    path: '/client',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -161,16 +186,55 @@ const AuthenticatedAssistantThreadIdRoute =
     path: '/assistant/$threadId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedClientDashboardRoute =
+  AuthenticatedClientDashboardRouteImport.update({
+    id: '/dashboard',
+    path: '/dashboard',
+    getParentRoute: () => AuthenticatedClientRouteRoute,
+  } as any)
+const AuthenticatedClientDocumentsRoute =
+  AuthenticatedClientDocumentsRouteImport.update({
+    id: '/documents',
+    path: '/documents',
+    getParentRoute: () => AuthenticatedClientRouteRoute,
+  } as any)
+const AuthenticatedClientGuidelinesRoute =
+  AuthenticatedClientGuidelinesRouteImport.update({
+    id: '/guidelines',
+    path: '/guidelines',
+    getParentRoute: () => AuthenticatedClientRouteRoute,
+  } as any)
+const AuthenticatedClientLibraryRoute =
+  AuthenticatedClientLibraryRouteImport.update({
+    id: '/library',
+    path: '/library',
+    getParentRoute: () => AuthenticatedClientRouteRoute,
+  } as any)
+const AuthenticatedClientModulesRoute =
+  AuthenticatedClientModulesRouteImport.update({
+    id: '/modules',
+    path: '/modules',
+    getParentRoute: () => AuthenticatedClientRouteRoute,
+  } as any)
+const AuthenticatedClientPhasesRoute =
+  AuthenticatedClientPhasesRouteImport.update({
+    id: '/phases',
+    path: '/phases',
+    getParentRoute: () => AuthenticatedClientRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/archive': typeof ArchiveRoute
+  '/client-login': typeof ClientLoginRoute
   '/client-portal': typeof ClientPortalRoute
   '/contact': typeof ContactRoute
+  '/invite': typeof InviteRoute
   '/news': typeof NewsRoute
   '/portal': typeof PortalRoute
   '/work': typeof WorkRouteWithChildren
+  '/client': typeof AuthenticatedClientRouteRouteWithChildren
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/design': typeof AuthenticatedDesignRoute
@@ -186,16 +250,25 @@ export interface FileRoutesByFullPath {
   '/work/$slug': typeof WorkSlugRoute
   '/work/': typeof WorkIndexRoute
   '/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
+  '/client/dashboard': typeof AuthenticatedClientDashboardRoute
+  '/client/documents': typeof AuthenticatedClientDocumentsRoute
+  '/client/guidelines': typeof AuthenticatedClientGuidelinesRoute
+  '/client/library': typeof AuthenticatedClientLibraryRoute
+  '/client/modules': typeof AuthenticatedClientModulesRoute
+  '/client/phases': typeof AuthenticatedClientPhasesRoute
   '/assistant/': typeof AuthenticatedAssistantIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/archive': typeof ArchiveRoute
+  '/client-login': typeof ClientLoginRoute
   '/client-portal': typeof ClientPortalRoute
   '/contact': typeof ContactRoute
+  '/invite': typeof InviteRoute
   '/news': typeof NewsRoute
   '/portal': typeof PortalRoute
+  '/client': typeof AuthenticatedClientRouteRouteWithChildren
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/design': typeof AuthenticatedDesignRoute
@@ -211,6 +284,12 @@ export interface FileRoutesByTo {
   '/work/$slug': typeof WorkSlugRoute
   '/work': typeof WorkIndexRoute
   '/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
+  '/client/dashboard': typeof AuthenticatedClientDashboardRoute
+  '/client/documents': typeof AuthenticatedClientDocumentsRoute
+  '/client/guidelines': typeof AuthenticatedClientGuidelinesRoute
+  '/client/library': typeof AuthenticatedClientLibraryRoute
+  '/client/modules': typeof AuthenticatedClientModulesRoute
+  '/client/phases': typeof AuthenticatedClientPhasesRoute
   '/assistant': typeof AuthenticatedAssistantIndexRoute
 }
 export interface FileRoutesById {
@@ -219,11 +298,14 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/archive': typeof ArchiveRoute
+  '/client-login': typeof ClientLoginRoute
   '/client-portal': typeof ClientPortalRoute
   '/contact': typeof ContactRoute
+  '/invite': typeof InviteRoute
   '/news': typeof NewsRoute
   '/portal': typeof PortalRoute
   '/work': typeof WorkRouteWithChildren
+  '/_authenticated/client': typeof AuthenticatedClientRouteRouteWithChildren
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/design': typeof AuthenticatedDesignRoute
@@ -239,6 +321,12 @@ export interface FileRoutesById {
   '/work/$slug': typeof WorkSlugRoute
   '/work/': typeof WorkIndexRoute
   '/_authenticated/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
+  '/_authenticated/client/dashboard': typeof AuthenticatedClientDashboardRoute
+  '/_authenticated/client/documents': typeof AuthenticatedClientDocumentsRoute
+  '/_authenticated/client/guidelines': typeof AuthenticatedClientGuidelinesRoute
+  '/_authenticated/client/library': typeof AuthenticatedClientLibraryRoute
+  '/_authenticated/client/modules': typeof AuthenticatedClientModulesRoute
+  '/_authenticated/client/phases': typeof AuthenticatedClientPhasesRoute
   '/_authenticated/assistant/': typeof AuthenticatedAssistantIndexRoute
 }
 export interface FileRouteTypes {
@@ -247,11 +335,14 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/archive'
+    | '/client-login'
     | '/client-portal'
     | '/contact'
+    | '/invite'
     | '/news'
     | '/portal'
     | '/work'
+    | '/client'
     | '/admin'
     | '/dashboard'
     | '/design'
@@ -267,16 +358,25 @@ export interface FileRouteTypes {
     | '/work/$slug'
     | '/work/'
     | '/assistant/$threadId'
+    | '/client/dashboard'
+    | '/client/documents'
+    | '/client/guidelines'
+    | '/client/library'
+    | '/client/modules'
+    | '/client/phases'
     | '/assistant/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/archive'
+    | '/client-login'
     | '/client-portal'
     | '/contact'
+    | '/invite'
     | '/news'
     | '/portal'
+    | '/client'
     | '/admin'
     | '/dashboard'
     | '/design'
@@ -292,6 +392,12 @@ export interface FileRouteTypes {
     | '/work/$slug'
     | '/work'
     | '/assistant/$threadId'
+    | '/client/dashboard'
+    | '/client/documents'
+    | '/client/guidelines'
+    | '/client/library'
+    | '/client/modules'
+    | '/client/phases'
     | '/assistant'
   id:
     | '__root__'
@@ -299,11 +405,14 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/about'
     | '/archive'
+    | '/client-login'
     | '/client-portal'
     | '/contact'
+    | '/invite'
     | '/news'
     | '/portal'
     | '/work'
+    | '/_authenticated/client'
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
     | '/_authenticated/design'
@@ -319,6 +428,12 @@ export interface FileRouteTypes {
     | '/work/$slug'
     | '/work/'
     | '/_authenticated/assistant/$threadId'
+    | '/_authenticated/client/dashboard'
+    | '/_authenticated/client/documents'
+    | '/_authenticated/client/guidelines'
+    | '/_authenticated/client/library'
+    | '/_authenticated/client/modules'
+    | '/_authenticated/client/phases'
     | '/_authenticated/assistant/'
   fileRoutesById: FileRoutesById
 }
@@ -327,8 +442,10 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   ArchiveRoute: typeof ArchiveRoute
+  ClientLoginRoute: typeof ClientLoginRoute
   ClientPortalRoute: typeof ClientPortalRoute
   ContactRoute: typeof ContactRoute
+  InviteRoute: typeof InviteRoute
   NewsRoute: typeof NewsRoute
   PortalRoute: typeof PortalRoute
   WorkRoute: typeof WorkRouteWithChildren
@@ -365,6 +482,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ArchiveRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/client-login': {
+      id: '/client-login'
+      path: '/client-login'
+      fullPath: '/client-login'
+      preLoaderRoute: typeof ClientLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/client-portal': {
       id: '/client-portal'
       path: '/client-portal'
@@ -377,6 +501,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/invite': {
+      id: '/invite'
+      path: '/invite'
+      fullPath: '/invite'
+      preLoaderRoute: typeof InviteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/news': {
@@ -405,6 +536,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/client': {
+      id: '/_authenticated/client'
+      path: '/client'
+      fullPath: '/client'
+      preLoaderRoute: typeof AuthenticatedClientRouteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard': {
@@ -512,10 +650,77 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAssistantThreadIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/client/dashboard': {
+      id: '/_authenticated/client/dashboard'
+      path: '/dashboard'
+      fullPath: '/client/dashboard'
+      preLoaderRoute: typeof AuthenticatedClientDashboardRouteImport
+      parentRoute: typeof AuthenticatedClientRouteRoute
+    }
+    '/_authenticated/client/documents': {
+      id: '/_authenticated/client/documents'
+      path: '/documents'
+      fullPath: '/client/documents'
+      preLoaderRoute: typeof AuthenticatedClientDocumentsRouteImport
+      parentRoute: typeof AuthenticatedClientRouteRoute
+    }
+    '/_authenticated/client/guidelines': {
+      id: '/_authenticated/client/guidelines'
+      path: '/guidelines'
+      fullPath: '/client/guidelines'
+      preLoaderRoute: typeof AuthenticatedClientGuidelinesRouteImport
+      parentRoute: typeof AuthenticatedClientRouteRoute
+    }
+    '/_authenticated/client/library': {
+      id: '/_authenticated/client/library'
+      path: '/library'
+      fullPath: '/client/library'
+      preLoaderRoute: typeof AuthenticatedClientLibraryRouteImport
+      parentRoute: typeof AuthenticatedClientRouteRoute
+    }
+    '/_authenticated/client/modules': {
+      id: '/_authenticated/client/modules'
+      path: '/modules'
+      fullPath: '/client/modules'
+      preLoaderRoute: typeof AuthenticatedClientModulesRouteImport
+      parentRoute: typeof AuthenticatedClientRouteRoute
+    }
+    '/_authenticated/client/phases': {
+      id: '/_authenticated/client/phases'
+      path: '/phases'
+      fullPath: '/client/phases'
+      preLoaderRoute: typeof AuthenticatedClientPhasesRouteImport
+      parentRoute: typeof AuthenticatedClientRouteRoute
+    }
   }
 }
 
+interface AuthenticatedClientRouteRouteChildren {
+  AuthenticatedClientDashboardRoute: typeof AuthenticatedClientDashboardRoute
+  AuthenticatedClientDocumentsRoute: typeof AuthenticatedClientDocumentsRoute
+  AuthenticatedClientGuidelinesRoute: typeof AuthenticatedClientGuidelinesRoute
+  AuthenticatedClientLibraryRoute: typeof AuthenticatedClientLibraryRoute
+  AuthenticatedClientModulesRoute: typeof AuthenticatedClientModulesRoute
+  AuthenticatedClientPhasesRoute: typeof AuthenticatedClientPhasesRoute
+}
+
+const AuthenticatedClientRouteRouteChildren: AuthenticatedClientRouteRouteChildren =
+  {
+    AuthenticatedClientDashboardRoute: AuthenticatedClientDashboardRoute,
+    AuthenticatedClientDocumentsRoute: AuthenticatedClientDocumentsRoute,
+    AuthenticatedClientGuidelinesRoute: AuthenticatedClientGuidelinesRoute,
+    AuthenticatedClientLibraryRoute: AuthenticatedClientLibraryRoute,
+    AuthenticatedClientModulesRoute: AuthenticatedClientModulesRoute,
+    AuthenticatedClientPhasesRoute: AuthenticatedClientPhasesRoute,
+  }
+
+const AuthenticatedClientRouteRouteWithChildren =
+  AuthenticatedClientRouteRoute._addFileChildren(
+    AuthenticatedClientRouteRouteChildren,
+  )
+
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedClientRouteRoute: typeof AuthenticatedClientRouteRouteWithChildren
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedDesignRoute: typeof AuthenticatedDesignRoute
@@ -532,6 +737,7 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedClientRouteRoute: AuthenticatedClientRouteRouteWithChildren,
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedDesignRoute: AuthenticatedDesignRoute,
@@ -567,8 +773,10 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   ArchiveRoute: ArchiveRoute,
+  ClientLoginRoute: ClientLoginRoute,
   ClientPortalRoute: ClientPortalRoute,
   ContactRoute: ContactRoute,
+  InviteRoute: InviteRoute,
   NewsRoute: NewsRoute,
   PortalRoute: PortalRoute,
   WorkRoute: WorkRouteWithChildren,

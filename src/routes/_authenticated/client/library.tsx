@@ -1,0 +1,3 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { LibraryPage } from "@/components/portal/PortalFeaturePage";
+export const Route = createFileRoute("/_authenticated/client/library")({ head: () => ({ meta: [{ title: "Asset & Brand Library | Brix" }, { name: "description", content: "Browse approved assets for your assigned projects." }, { property: "og:title", content: "Asset & Brand Library | Brix" }, { property: "og:description", content: "Approved project assets." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }), component: () => <LibraryPage kind="brand" clientMode /> });

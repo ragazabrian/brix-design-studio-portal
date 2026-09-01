@@ -150,6 +150,7 @@ export function PortalShell({
   actions,
   hideAssistantDock,
   immersive,
+  clientMode = false,
   children,
 }: {
   title: string;
@@ -162,6 +163,8 @@ export function PortalShell({
   hideAssistantDock?: boolean | undefined;
   /** Removes page framing for full-height tools such as chat. */
   immersive?: boolean | undefined;
+  /** Uses the client-only route set and sign-in destination. */
+  clientMode?: boolean | undefined;
   children: ReactNode;
 }) {
   const navigate = useNavigate();
@@ -178,6 +181,12 @@ export function PortalShell({
     setCollapsed(window.localStorage.getItem(COLLAPSE_KEY) === "true");
   }, []);
 
+  useEffect(() => {
+    if (role === "client" && !clientMode) {
+      navigate({ to: "/client/dashboard", replace: true });
+    }
+  }, [clientMode, navigate, role]);
+
   function toggleCollapsed() {
     setCollapsed((value) => {
       const next = !value;
@@ -189,7 +198,9 @@ export function PortalShell({
 
   const unread = (notifications ?? []).filter((item) => !item.read_at).length;
 
+  const clientItems = new Set(["/dashboard", "/phases", "/documents", "/library", "/guidelines", "/modules"]);
   const items = navItems.filter((item) => {
+    if (clientMode && !clientItems.has(item.to)) return false;
     if (item.adminOnly) return role === "admin";
     if (item.staffOnly) return role === "admin" || role === "designer";
     return true;
@@ -199,7 +210,7 @@ export function PortalShell({
     await queryClient.cancelQueries();
     queryClient.clear();
     await supabase.auth.signOut();
-    navigate({ to: "/portal", replace: true });
+    navigate({ to: clientMode ? "/client-login" : "/portal", replace: true });
   }
 
   const linkClass =
@@ -207,7 +218,7 @@ export function PortalShell({
 
   return (
     <div
-      className={`min-h-screen bg-background text-foreground lg:grid ${
+      className={`${clientMode ? "dark" : ""} min-h-screen bg-background text-foreground lg:grid ${
         collapsed ? "lg:grid-cols-[4.5rem_minmax(0,1fr)]" : "lg:grid-cols-[16rem_minmax(0,1fr)]"
       }`}
     >
@@ -243,7 +254,7 @@ export function PortalShell({
       >
         <div className={`relative flex min-h-9 items-center gap-2 px-1 ${collapsed ? "lg:justify-center" : "justify-between"}`}>
           <Link
-            to="/dashboard"
+             to={clientMode ? "/client/dashboard" : "/dashboard"}
             aria-label={`${studio.shortName} portal home`}
             onClick={() => setNavOpen(false)}
             className="flex items-center"
@@ -282,7 +293,7 @@ export function PortalShell({
           {items.map((item) => (
             <Link
               key={item.to}
-              to={item.to}
+               to={clientMode ? `/client${item.to}` as "/client/dashboard" : item.to}
               onClick={() => setNavOpen(false)}
               activeProps={{ className: "bg-muted text-foreground" }}
               className={`${linkClass} ${collapsed ? "lg:justify-center lg:px-0" : ""}`}

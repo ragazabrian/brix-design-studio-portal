@@ -1,0 +1,3 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { GuidelinesPage } from "@/components/portal/PortalFeaturePage";
+export const Route = createFileRoute("/_authenticated/client/guidelines")({ head: () => ({ meta: [{ title: "Brand Guidelines | Brix" }, { name: "description", content: "Review the brand guidelines for your assigned projects." }, { property: "og:title", content: "Brand Guidelines | Brix" }, { property: "og:description", content: "Your current visual brand standards." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }), component: () => <GuidelinesPage clientMode /> });

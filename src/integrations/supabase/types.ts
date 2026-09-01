@@ -429,6 +429,42 @@ export type Database = {
         }
         Relationships: []
       }
+      invitation_projects: {
+        Row: {
+          created_at: string
+          id: string
+          invitation_id: string
+          project_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          invitation_id: string
+          project_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          invitation_id?: string
+          project_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invitation_projects_invitation_id_fkey"
+            columns: ["invitation_id"]
+            isOneToOne: false
+            referencedRelation: "invitations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invitation_projects_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       invitations: {
         Row: {
           accepted_at: string | null
@@ -935,7 +971,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      complete_portal_invitation: {
+        Args: { _email: string; _token: string; _user_id: string }
+        Returns: {
+          destination: string
+          role: Database["public"]["Enums"]["app_role"]
+        }[]
+      }
     }
     Enums: {
       app_role: "admin" | "designer" | "client"

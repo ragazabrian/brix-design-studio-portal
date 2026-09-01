@@ -1,0 +1,3 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { PhasesPage } from "@/components/portal/PortalFeaturePage";
+export const Route = createFileRoute("/_authenticated/client/phases")({ head: () => ({ meta: [{ title: "Project Phases | Brix" }, { name: "description", content: "Track progress across your assigned projects." }, { property: "og:title", content: "Project Phases | Brix" }, { property: "og:description", content: "Your Brix project progress." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }), component: () => <PhasesPage clientMode /> });

@@ -1,0 +1,3 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { DocumentsPage } from "@/components/portal/PortalFeaturePage";
+export const Route = createFileRoute("/_authenticated/client/documents")({ head: () => ({ meta: [{ title: "Project Documents | Brix" }, { name: "description", content: "View documents shared with your Brix projects." }, { property: "og:title", content: "Project Documents | Brix" }, { property: "og:description", content: "Your shared Brix project documents." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }), component: () => <DocumentsPage clientMode /> });

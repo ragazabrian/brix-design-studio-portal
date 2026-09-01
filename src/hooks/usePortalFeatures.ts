@@ -53,7 +53,7 @@ export function useLibraryAssets(projectId: string | undefined, kind: "brand" | 
 
       const rows = data ?? [];
       const urls = await signPaths(
-        rows.map((row) => row.thumbnail_path ?? row.storage_path).filter(Boolean) as string[],
+        Array.from(new Set(rows.flatMap((row) => [row.thumbnail_path, row.storage_path]).filter(Boolean))) as string[],
       );
       return rows.map((row) => ({
         ...row,

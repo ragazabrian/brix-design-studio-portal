@@ -1,0 +1,3 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { LibraryPage } from "@/components/portal/PortalFeaturePage";
+export const Route = createFileRoute("/_authenticated/client/modules")({ head: () => ({ meta: [{ title: "Module Library | Brix" }, { name: "description", content: "Browse approved reusable modules for your projects." }, { property: "og:title", content: "Module Library | Brix" }, { property: "og:description", content: "Approved reusable project modules." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }), component: () => <LibraryPage kind="module" clientMode /> });

@@ -173,6 +173,19 @@
   --sidebar-ring: var(--brand);
 }
 
+/* Authentication stays dark regardless of the workspace appearance setting. */
+.portal-auth-theme {
+  --ink: oklch(0.98 0 0);
+  --paper: oklch(0.98 0 0);
+  --frost: oklch(0.14 0 0);
+  --stone: oklch(0.68 0 0);
+  --obsidian: oklch(0 0 0);
+  --brand: oklch(0.452 0.276 264.6);
+  --brand-deep: oklch(0.348 0.223 264.6);
+  --brand-soft: oklch(0.2 0.05 264.6);
+  color-scheme: dark;
+}
+
 @layer base {
   * {
     border-color: var(--color-border);

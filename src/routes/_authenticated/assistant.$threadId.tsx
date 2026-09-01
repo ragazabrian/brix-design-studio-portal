@@ -97,13 +97,13 @@ function AssistantThreadPage() {
                 <div
                   key={item.id}
                   className={`grid grid-cols-[minmax(0,1fr)_auto] items-center gap-1 rounded-2xl px-1 ${
-                    active ? "bg-frost" : ""
+                    active ? "bg-muted" : ""
                   }`}
                 >
                   <Link
                     to="/assistant/$threadId"
                     params={{ threadId: item.id }}
-                    className="truncate rounded-2xl px-3 py-2.5 text-sm transition-colors hover:bg-frost"
+                    className="truncate rounded-2xl px-3 py-2.5 text-sm transition-colors hover:bg-muted"
                     aria-current={active ? "page" : undefined}
                   >
                     {item.title}
@@ -112,7 +112,7 @@ function AssistantThreadPage() {
                     type="button"
                     onClick={() => removeChat(item.id)}
                     aria-label={`Delete chat ${item.title}`}
-                    className="inline-flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-paper hover:text-ink"
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-card hover:text-foreground"
                   >
                     <HugeiconsIcon icon={Delete02Icon} size={16} strokeWidth={1.6} aria-hidden />
                   </button>

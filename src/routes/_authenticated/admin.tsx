@@ -123,7 +123,7 @@ function AdminPage() {
         profileName={profile?.full_name}
         avatarUrl={profile?.avatar_url}
       >
-        <p className="rounded-3xl bg-frost p-6 text-muted-foreground">
+        <p className="rounded-3xl bg-muted p-6 text-muted-foreground">
           You do not have access to team settings.
         </p>
       </PortalShell>
@@ -131,7 +131,7 @@ function AdminPage() {
   }
 
   const field =
-    "w-full rounded-3xl border border-input bg-paper px-5 py-3 text-[15px] placeholder:text-muted-foreground";
+    "w-full rounded-3xl border border-input bg-card px-5 py-3 text-[15px] placeholder:text-muted-foreground";
 
   return (
     <PortalShell
@@ -239,7 +239,7 @@ function AdminPage() {
                       id={`role-${person.id}`}
                       value={person.roles[0] ?? "client"}
                       onChange={(event) => setRole(person.id, event.target.value as AppRole)}
-                      className="rounded-full border border-input bg-paper px-4 py-2 text-sm"
+                      className="rounded-full border border-input bg-card px-4 py-2 text-sm"
                     >
                       {roles.map((role) => (
                         <option key={role} value={role}>
@@ -250,7 +250,7 @@ function AdminPage() {
                     <button
                       type="button"
                       onClick={() => setActive(person.id, !person.is_active)}
-                      className="rounded-full border border-border px-4 py-2 text-sm transition-colors hover:bg-frost"
+                      className="rounded-full border border-border px-4 py-2 text-sm transition-colors hover:bg-muted"
                     >
                       {person.is_active ? "Deactivate" : "Reactivate"}
                     </button>
@@ -259,7 +259,7 @@ function AdminPage() {
               ))}
             </ul>
           ) : (
-            <p className="mt-6 rounded-3xl bg-frost p-6 text-muted-foreground">
+            <p className="mt-6 rounded-3xl bg-muted p-6 text-muted-foreground">
               No one has signed in yet.
             </p>
           )}

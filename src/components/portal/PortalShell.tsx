@@ -36,7 +36,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import wordmarkLight from "@/assets/brix-wordmark-light.svg.asset.json";
-import wordmarkDark from "@/assets/brix-wordmark-dark.svg.asset.json";
+import wordmarkDark from "@/assets/brix-wordmark-dark.svg";
 
 const roleLabel: Record<AppRole, string> = {
   admin: "Admin",
@@ -66,13 +66,7 @@ const navItems: NavItem[] = [
   { to: "/admin", label: "Team", icon: UserGroupIcon, adminOnly: true },
 ];
 
-function NotificationsPopover({
-  onClose,
-  collapsed,
-}: {
-  onClose: () => void;
-  collapsed: boolean;
-}) {
+function NotificationsPopover({ onClose, collapsed }: { onClose: () => void; collapsed: boolean }) {
   const { user } = useSession();
   const { data: items } = useNotifications(user?.id);
   const queryClient = useQueryClient();
@@ -198,7 +192,14 @@ export function PortalShell({
 
   const unread = (notifications ?? []).filter((item) => !item.read_at).length;
 
-  const clientItems = new Set(["/dashboard", "/phases", "/documents", "/library", "/guidelines", "/modules"]);
+  const clientItems = new Set([
+    "/dashboard",
+    "/phases",
+    "/documents",
+    "/library",
+    "/guidelines",
+    "/modules",
+  ]);
   const items = navItems.filter((item) => {
     if (clientMode && !clientItems.has(item.to)) return false;
     if (item.adminOnly) return role === "admin";
@@ -252,17 +253,31 @@ export function PortalShell({
           collapsed ? "lg:px-2" : "lg:px-5"
         }`}
       >
-        <div className={`relative flex min-h-9 items-center gap-2 px-1 ${collapsed ? "lg:justify-center" : "justify-between"}`}>
+        <div
+          className={`relative flex min-h-9 items-center gap-2 px-1 ${collapsed ? "lg:justify-center" : "justify-between"}`}
+        >
           <Link
-             to={clientMode ? "/client/dashboard" : "/dashboard"}
+            to={clientMode ? "/client/dashboard" : "/dashboard"}
             aria-label={`${studio.shortName} portal home`}
             onClick={() => setNavOpen(false)}
             className="flex items-center"
           >
             {collapsed ? (
-              <img src="/favicon.svg" alt={`${studio.shortName} mark`} width={32} height={32} className="hidden h-8 w-8 lg:block" />
+              <img
+                src="/favicon.svg"
+                alt={`${studio.shortName} mark`}
+                width={32}
+                height={32}
+                className="hidden h-8 w-8 lg:block"
+              />
             ) : null}
-            <img src={resolvedTheme === "dark" ? wordmarkDark.url : wordmarkLight.url} alt={`${studio.shortName} wordmark`} width={1939} height={573} className={`h-4 w-auto ${collapsed ? "lg:hidden" : ""}`} />
+            <img
+              src={resolvedTheme === "dark" ? wordmarkDark : wordmarkLight.url}
+              alt={`${studio.shortName} wordmark`}
+              width={1939}
+              height={573}
+              className={`h-4 w-auto ${collapsed ? "lg:hidden" : ""}`}
+            />
           </Link>
           <button
             type="button"
@@ -293,7 +308,7 @@ export function PortalShell({
           {items.map((item) => (
             <Link
               key={item.to}
-               to={clientMode ? `/client${item.to}` as "/client/dashboard" : item.to}
+              to={clientMode ? (`/client${item.to}` as "/client/dashboard") : item.to}
               onClick={() => setNavOpen(false)}
               activeProps={{ className: "bg-muted text-foreground" }}
               className={`${linkClass} ${collapsed ? "lg:justify-center lg:px-0" : ""}`}
@@ -407,7 +422,9 @@ export function PortalShell({
                   </span>
                 )}
                 <span className="min-w-0">
-                  <span className="block truncate font-semibold">{profileName ?? "Your account"}</span>
+                  <span className="block truncate font-semibold">
+                    {profileName ?? "Your account"}
+                  </span>
                   <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
                     <span className="h-2 w-2 rounded-full border border-muted-foreground" /> Active
                   </span>

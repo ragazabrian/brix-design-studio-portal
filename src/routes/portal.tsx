@@ -6,13 +6,17 @@ import { toast } from "sonner";
 import { motion, useReducedMotion } from "motion/react";
 
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
-import wordmarkDark from "@/assets/brix-wordmark-dark.svg.asset.json";
+import wordmarkDark from "@/assets/brix-wordmark-dark.svg";
 import authPanel from "@/assets/auth-panel.jpg";
 
 export const Route = createFileRoute("/portal")({
   validateSearch: (search: Record<string, unknown>) => ({
-    next: typeof search.next === "string" && search.next.startsWith("/") && !search.next.startsWith("//") ? search.next : "",
+    next:
+      typeof search.next === "string" &&
+      search.next.startsWith("/") &&
+      !search.next.startsWith("//")
+        ? search.next
+        : "",
   }),
   head: () => ({
     meta: [
@@ -81,16 +85,19 @@ function PortalAuthPage() {
 
   async function onGoogle() {
     setBusy(true);
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: `${window.location.origin}/portal${next ? `?next=${encodeURIComponent(next)}` : ""}`,
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/portal${next ? `?next=${encodeURIComponent(next)}` : ""}`,
+      },
     });
-    if (result.error) {
+    if (error) {
       setBusy(false);
       toast.error("Google sign in did not complete. Try again or use your email and password.");
-      return;
     }
-    if (result.redirected) return;
-    navigate({ to: safeNext as "/dashboard" });
+    // On success the browser redirects to Google immediately; the on-mount
+    // getSession() effect above picks up the session and navigates once it
+    // returns to /portal.
   }
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -135,8 +142,12 @@ function PortalAuthPage() {
       {/* Form side */}
       <div className="relative flex h-svh flex-col overflow-y-auto px-5 py-6 sm:px-10 lg:h-full lg:px-14 xl:px-20">
         <div className="flex shrink-0 items-center">
-          <Link to="/" className="inline-flex items-center gap-3" aria-label="Brix Design Studio home">
-            <img src={wordmarkDark.url} alt="Brix Design Studio" className="h-4 w-auto" />
+          <Link
+            to="/"
+            className="inline-flex items-center gap-3"
+            aria-label="Brix Design Studio home"
+          >
+            <img src={wordmarkDark} alt="Brix Design Studio" className="h-4 w-auto" />
           </Link>
         </div>
 
@@ -170,7 +181,6 @@ function PortalAuthPage() {
             <span className="text-caption">or use your email</span>
             <span className="h-px flex-1 bg-paper/12" />
           </div>
-
 
           <form onSubmit={onSubmit} className="space-y-3">
             {!signingIn ? (
@@ -240,7 +250,6 @@ function PortalAuthPage() {
               {signingIn ? "Create one" : "Sign in instead"}
             </button>
           </p>
-
         </motion.div>
       </div>
 

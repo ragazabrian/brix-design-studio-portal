@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 import { studio } from "@/data/site";
 import wordmarkLight from "@/assets/brix-wordmark-light.svg.asset.json";
-import wordmarkDark from "@/assets/brix-wordmark-dark.svg.asset.json";
+import wordmarkDark from "@/assets/brix-wordmark-dark.svg";
 import { FullScreenMenu } from "@/components/site/FullScreenMenu";
 import { cn } from "@/lib/utils";
 
@@ -41,7 +41,7 @@ export function Navbar({ overHero = false }: { overHero?: boolean }) {
         <div className="page-shell flex h-16 items-center justify-between gap-4 md:h-20">
           <Link to="/" aria-label={`${studio.shortName} home`} className="flex items-center">
             <img
-              src={transparent ? wordmarkDark.url : wordmarkLight.url}
+              src={transparent ? wordmarkDark : wordmarkLight.url}
               alt={`${studio.shortName} wordmark`}
               width={1939}
               height={573}

@@ -9,14 +9,11 @@ import { PillButton } from "@/components/site/Primitives";
 import { supabase } from "@/integrations/supabase/client";
 import {
   useActivity,
-  useIntegrations,
-  notify,
   useProfile,
   useProjects,
   useRoles,
   useSession,
   useTasks,
-  useTimeEntries,
   type AppRole,
 } from "@/hooks/usePortal";
 
@@ -87,7 +84,7 @@ function DashboardPage() {
   return (
     <PortalShell
       title={`Welcome back${profile?.full_name ? `, ${profile.full_name.split(" ")[0]}` : ""}`}
-      description="Everything we are making for you, with the files, tasks and hours behind it."
+      description="Everything we are making for you, with the latest files, tasks and next steps in one place."
       role={role}
       profileName={profile?.full_name}
       avatarUrl={profile?.avatar_url}
@@ -177,7 +174,7 @@ function DashboardPage() {
             </p>
           )}
 
-          <Integrations />
+          
         </aside>
 
         <div className="space-y-12">
@@ -216,12 +213,6 @@ function DashboardPage() {
                 query={query}
               />
               <Tasks projectId={activeProject.id} canEdit={isStaff} query={query} />
-              <Hours
-                projectId={activeProject.id}
-                canLog={isStaff}
-                userId={user!.id}
-                query={query}
-              />
               <ActivityLog projectId={activeProject.id} />
             </>
           ) : (
@@ -456,94 +447,8 @@ function Tasks({
   );
 }
 
-function Hours({
-  projectId,
-  canLog,
-  userId,
-  query,
-}: {
-  projectId: string;
-  canLog: boolean;
-  userId: string;
-  query: string;
-}) {
-  const { data: entries } = useTimeEntries(projectId);
-  const queryClient = useQueryClient();
-  const term = query.trim().toLowerCase();
-  const visibleEntries = (entries ?? []).filter(
-    (entry) =>
-      term.length === 0 ||
-      (entry.description ?? "").toLowerCase().includes(term) ||
-      entry.entry_date.includes(term),
-  );
-  const total = (entries ?? []).reduce((sum, entry) => sum + entry.minutes, 0);
 
-  async function logTime() {
-    const raw = window.prompt("Minutes to log");
-    if (!raw) return;
-    const minutes = Number(raw);
-    if (!Number.isFinite(minutes) || minutes <= 0) {
-      toast.error("Enter minutes as a number.");
-      return;
-    }
-    const description = window.prompt("What did this cover?") ?? "";
-    const { error } = await supabase.from("time_entries").insert({
-      project_id: projectId,
-      user_id: userId,
-      minutes,
-      description: description || null,
-      entry_date: new Date().toISOString().slice(0, 10),
-    });
-    if (error) {
-      toast.error("The hours were not logged.");
-      return;
-    }
-    await queryClient.invalidateQueries({ queryKey: ["time-entries", projectId] });
-  }
 
-  return (
-    <section aria-labelledby="hours-heading">
-      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
-        <h2 id="hours-heading" className="text-[20px] font-medium">
-          Hours
-        </h2>
-        {canLog ? (
-          <button
-            type="button"
-            onClick={logTime}
-            className="rounded-full border border-border px-4 py-2 text-sm transition-colors hover:bg-frost"
-          >
-            Log time
-          </button>
-        ) : null}
-      </div>
-
-      <p className="mt-4 text-muted-foreground tabular-nums">
-        {(total / 60).toFixed(1)} hours logged on this project.
-      </p>
-
-      {visibleEntries.length > 0 ? (
-        <ul className="mt-6 divide-y divide-border rounded-3xl border border-border">
-          {visibleEntries.map((entry) => (
-            <li key={entry.id} className="grid grid-cols-[minmax(0,1fr)_auto] gap-4 p-4">
-              <span className="min-w-0">
-                <span className="block truncate text-[15px]">
-                  {entry.description ?? "Studio time"}
-                </span>
-                <span className="mt-1 block text-caption text-muted-foreground tabular-nums">
-                  {entry.entry_date}
-                </span>
-              </span>
-              <span className="text-[15px] tabular-nums">{(entry.minutes / 60).toFixed(1)} h</span>
-            </li>
-          ))}
-        </ul>
-      ) : null}
-    </section>
-  );
-}
-
-function Integrations() {
   const { data: connections } = useIntegrations();
   const queryClient = useQueryClient();
   const { user } = useSession();

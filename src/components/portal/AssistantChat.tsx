@@ -143,7 +143,7 @@ export function AssistantChat({
     for (const item of files) {
       if (!item.url) continue;
       try {
-        const response = await fetch(item.url);
+      const response = await fetch(item.url);
         const name = item.filename ?? "attachment";
         const file = new File([await response.blob()], name, {
           type: item.mediaType ?? "application/octet-stream",

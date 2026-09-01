@@ -1,19 +1,74 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Logout01Icon, Notification03Icon } from "@hugeicons/core-free-icons";
+import {
+  BookOpen01Icon,
+  Calendar03Icon,
+  DashboardSquare01Icon,
+  File01Icon,
+  Grid01Icon,
+  Logout01Icon,
+  Menu01Icon,
+  Message01Icon,
+  Moon02Icon,
+  Notification03Icon,
+  Settings02Icon,
+  Sun03Icon,
+  SparklesIcon,
+  UserGroupIcon,
+} from "@hugeicons/core-free-icons";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
 
 import { studio } from "@/data/site";
 import { supabase } from "@/integrations/supabase/client";
 import { useNotifications, useSession, type AppRole } from "@/hooks/usePortal";
+import { useTheme } from "@/lib/theme";
+import { AssistantDock } from "@/components/portal/AssistantDock";
 import wordmarkLight from "@/assets/brix-wordmark-light.svg.asset.json";
+import wordmarkDark from "@/assets/brix-wordmark-dark.svg.asset.json";
 
 const roleLabel: Record<AppRole, string> = {
   admin: "Admin",
   designer: "Designer",
   client: "Client",
 };
+
+type NavItem = {
+  to: string;
+  label: string;
+  icon: typeof DashboardSquare01Icon;
+  staffOnly?: boolean;
+  adminOnly?: boolean;
+};
+
+const navItems: NavItem[] = [
+  { to: "/dashboard", label: "Dashboard", icon: DashboardSquare01Icon },
+  { to: "/library", label: "Asset library", icon: Grid01Icon },
+  { to: "/guidelines", label: "Brand guidelines", icon: BookOpen01Icon },
+  { to: "/modules", label: "Module library", icon: SparklesIcon },
+  { to: "/documents", label: "Documents", icon: File01Icon },
+  { to: "/meetings", label: "Meetings", icon: Calendar03Icon },
+  { to: "/requests", label: "Requests", icon: Message01Icon },
+  { to: "/assistant", label: "Assistant", icon: Message01Icon, staffOnly: true },
+  { to: "/admin", label: "Team", icon: UserGroupIcon, adminOnly: true },
+  { to: "/settings", label: "Settings", icon: Settings02Icon },
+];
+
+function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme();
+  const dark = theme === "dark";
+  return (
+    <button
+      type="button"
+      onClick={toggleTheme}
+      aria-pressed={dark}
+      aria-label={dark ? "Switch to the light theme" : "Switch to the dark theme"}
+      className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border transition-colors hover:bg-muted"
+    >
+      <HugeiconsIcon icon={dark ? Sun03Icon : Moon02Icon} size={18} strokeWidth={1.6} aria-hidden />
+    </button>
+  );
+}
 
 function NotificationBell() {
   const { user } = useSession();
@@ -40,11 +95,11 @@ function NotificationBell() {
         aria-label={
           unread > 0 ? `Notifications, ${unread} unread` : "Notifications, nothing unread"
         }
-        className="relative inline-flex h-10 w-10 items-center justify-center rounded-full border border-border transition-colors hover:bg-frost"
+        className="relative inline-flex h-10 w-10 items-center justify-center rounded-full border border-border transition-colors hover:bg-muted"
       >
         <HugeiconsIcon icon={Notification03Icon} size={19} strokeWidth={1.6} aria-hidden />
         {unread > 0 ? (
-          <span className="absolute -right-0.5 -top-0.5 min-w-5 rounded-full bg-ink px-1.5 py-0.5 text-[11px] font-medium tabular-nums text-paper">
+          <span className="absolute -right-0.5 -top-0.5 min-w-5 rounded-full bg-primary px-1.5 py-0.5 text-[11px] font-medium tabular-nums text-primary-foreground">
             {unread}
           </span>
         ) : null}
@@ -54,7 +109,7 @@ function NotificationBell() {
         <div
           role="region"
           aria-label="Notifications"
-          className="absolute right-0 z-30 mt-2 w-[min(22rem,calc(100vw-2.5rem))] rounded-3xl border border-border bg-paper p-4 shadow-lg"
+          className="absolute right-0 z-40 mt-2 w-[min(22rem,calc(100vw-2.5rem))] rounded-3xl border border-border bg-card p-4 shadow-lg"
         >
           <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
             <h2 className="label-caps text-muted-foreground">Notifications</h2>
@@ -72,7 +127,7 @@ function NotificationBell() {
               {items.map((item) => (
                 <li
                   key={item.id}
-                  className={`rounded-2xl p-3 ${item.read_at ? "bg-paper" : "bg-frost"}`}
+                  className={`rounded-2xl p-3 ${item.read_at ? "" : "bg-muted"}`}
                 >
                   <p className="text-[15px] font-medium">{item.title}</p>
                   {item.body ? (
@@ -86,7 +141,7 @@ function NotificationBell() {
             </ul>
           ) : (
             <p className="mt-3 text-caption text-muted-foreground">
-              Nothing here yet. Connection updates and file changes will show up in this list.
+              Nothing here yet. File changes and connection updates show up in this list.
             </p>
           )}
         </div>
@@ -101,6 +156,7 @@ export function PortalShell({
   role,
   profileName,
   avatarUrl,
+  actions,
   children,
 }: {
   title: string;
@@ -108,10 +164,19 @@ export function PortalShell({
   role?: AppRole | undefined;
   profileName?: string | null | undefined;
   avatarUrl?: string | null | undefined;
+  actions?: ReactNode;
   children: ReactNode;
 }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { theme } = useTheme();
+  const [navOpen, setNavOpen] = useState(false);
+
+  const items = navItems.filter((item) => {
+    if (item.adminOnly) return role === "admin";
+    if (item.staffOnly) return role === "admin" || role === "designer";
+    return true;
+  });
 
   async function signOut() {
     await queryClient.cancelQueries();
@@ -120,100 +185,114 @@ export function PortalShell({
     navigate({ to: "/portal", replace: true });
   }
 
+  const linkClass =
+    "flex items-center gap-3 rounded-2xl px-3 py-2.5 text-[15px] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground";
+
   return (
-    <div className="flex min-h-screen flex-col bg-paper">
-      <header className="border-b border-border">
-        <div className="page-shell flex flex-wrap items-center justify-between gap-4 py-4">
-          <Link
-            to="/dashboard"
-            aria-label={`${studio.shortName} portal home`}
-            className="flex items-center gap-2"
-          >
-            <img
-              src={wordmarkLight.url}
-              alt={`${studio.shortName} wordmark`}
-              width={1939}
-              height={573}
-              className="h-5 w-auto"
-            />
-            <span className="hidden text-sm text-muted-foreground sm:inline">Client Portal</span>
-          </Link>
+    <div className="min-h-screen bg-background text-foreground lg:grid lg:grid-cols-[16rem_minmax(0,1fr)]">
+      {/* Sidebar */}
+      <div
+        id="portal-nav"
+        className={`${navOpen ? "block" : "hidden"} border-b border-border bg-card px-4 py-5 lg:sticky lg:top-0 lg:block lg:h-screen lg:overflow-y-auto lg:border-b-0 lg:border-r lg:px-5 lg:py-6`}
+      >
+        <Link
+          to="/dashboard"
+          aria-label={`${studio.shortName} portal home`}
+          className="flex items-center gap-2"
+        >
+          <img
+            src={theme === "dark" ? wordmarkDark.url : wordmarkLight.url}
+            alt={`${studio.shortName} wordmark`}
+            width={1939}
+            height={573}
+            className="h-4 w-auto"
+          />
+          <span className="text-caption text-muted-foreground">Client Portal</span>
+        </Link>
 
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-            <nav aria-label="Portal" className="flex items-center gap-1">
-              <Link
-                to="/dashboard"
-                activeProps={{ className: "bg-frost" }}
-                className="rounded-full px-3 py-2 text-sm transition-colors hover:bg-frost"
-              >
-                Projects
-              </Link>
-              <Link
-                to="/assistant"
-                activeProps={{ className: "bg-frost" }}
-                className="rounded-full px-3 py-2 text-sm transition-colors hover:bg-frost"
-              >
-                Assistant
-              </Link>
-              {role === "admin" ? (
-                <Link
-                  to="/admin"
-                  activeProps={{ className: "bg-frost" }}
-                  className="rounded-full px-3 py-2 text-sm transition-colors hover:bg-frost"
-                >
-                  Team
-                </Link>
-              ) : null}
-              <Link
-                to="/settings"
-                activeProps={{ className: "bg-frost" }}
-                className="rounded-full px-3 py-2 text-sm transition-colors hover:bg-frost"
-              >
-                Settings
-              </Link>
-            </nav>
-
-            {role ? (
-              <span className="label-caps rounded-full bg-frost px-3 py-1.5 text-ink">
-                {roleLabel[role]}
-              </span>
-            ) : null}
-
-            <NotificationBell />
-
-            {avatarUrl ? (
-              <img
-                src={avatarUrl}
-                alt={profileName ? `Profile photo of ${profileName}` : "Your profile photo"}
-                width={36}
-                height={36}
-                referrerPolicy="no-referrer"
-                loading="lazy"
-                onError={(event) => {
-                  event.currentTarget.style.display = "none";
-                }}
-                className="h-9 w-9 shrink-0 rounded-full bg-frost object-cover"
-              />
-            ) : null}
-            <button
-              type="button"
-              onClick={signOut}
-              className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm transition-colors hover:bg-frost"
+        <nav aria-label="Portal sections" className="mt-7 grid gap-1">
+          {items.map((item) => (
+            <Link
+              key={item.to}
+              to={item.to}
+              onClick={() => setNavOpen(false)}
+              activeProps={{ className: "bg-muted text-foreground" }}
+              className={linkClass}
             >
-              <HugeiconsIcon icon={Logout01Icon} size={18} strokeWidth={1.6} aria-hidden />
-              Sign out
-            </button>
-          </div>
-        </div>
-      </header>
+              <HugeiconsIcon icon={item.icon} size={18} strokeWidth={1.6} aria-hidden />
+              {item.label}
+            </Link>
+          ))}
+        </nav>
 
-      <main id="main" className="page-shell flex-1 py-10 md:py-14">
-        <div className="grid grid-cols-[minmax(0,1fr)] gap-2">
-          <h1 className="display-serif text-[clamp(1.75rem,4vw,2.75rem)]">{title}</h1>
-          {description ? <p className="max-w-2xl text-muted-foreground">{description}</p> : null}
-        </div>
-        <div className="mt-10">{children}</div>
-      </main>
+        {role ? (
+          <p className="mt-7 rounded-2xl bg-muted px-4 py-3 text-caption text-muted-foreground">
+            You are signed in as {roleLabel[role]}.
+            {role === "client" ? " You can view and download, and raise requests." : ""}
+          </p>
+        ) : null}
+      </div>
+
+      {/* Main column */}
+      <div className="flex min-h-screen flex-col">
+        <header className="sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur">
+          <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-4 md:px-8">
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setNavOpen((value) => !value)}
+                aria-expanded={navOpen}
+                aria-controls="portal-nav"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border lg:hidden"
+              >
+                <HugeiconsIcon icon={Menu01Icon} size={19} strokeWidth={1.6} aria-hidden />
+                <span className="sr-only">Portal menu</span>
+              </button>
+              <span className="text-[15px] font-medium">{title}</span>
+            </div>
+
+            <div className="flex items-center gap-2 sm:gap-3">
+              {actions}
+              <ThemeToggle />
+              <NotificationBell />
+              {avatarUrl ? (
+                <img
+                  src={avatarUrl}
+                  alt={profileName ? `Profile photo of ${profileName}` : "Your profile photo"}
+                  width={36}
+                  height={36}
+                  referrerPolicy="no-referrer"
+                  loading="lazy"
+                  onError={(event) => {
+                    event.currentTarget.style.display = "none";
+                  }}
+                  className="h-9 w-9 shrink-0 rounded-full bg-muted object-cover"
+                />
+              ) : null}
+              <button
+                type="button"
+                onClick={signOut}
+                className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm transition-colors hover:bg-muted"
+              >
+                <HugeiconsIcon icon={Logout01Icon} size={18} strokeWidth={1.6} aria-hidden />
+                <span className="hidden sm:inline">Sign out</span>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <main id="main" className="flex-1 px-5 pb-40 pt-8 md:px-8 md:pt-10">
+          <div className="mx-auto w-full max-w-5xl">
+            <h1 className="display-serif text-[clamp(1.75rem,4vw,2.5rem)]">{title}</h1>
+            {description ? (
+              <p className="mt-3 max-w-2xl text-muted-foreground">{description}</p>
+            ) : null}
+            <div className="mt-8">{children}</div>
+          </div>
+        </main>
+      </div>
+
+      {role === "admin" || role === "designer" ? <AssistantDock /> : null}
     </div>
   );
 }

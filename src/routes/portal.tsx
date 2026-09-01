@@ -11,6 +11,9 @@ import wordmarkDark from "@/assets/brix-wordmark-dark.svg.asset.json";
 import authPanel from "@/assets/auth-panel.jpg";
 
 export const Route = createFileRoute("/portal")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    next: typeof search.next === "string" && search.next.startsWith("/") && !search.next.startsWith("//") ? search.next : "",
+  }),
   head: () => ({
     meta: [
       { title: "Sign in | Brix Design Studio" },
@@ -60,6 +63,8 @@ function GoogleMark() {
 
 function PortalAuthPage() {
   const navigate = useNavigate();
+  const { next } = Route.useSearch();
+  const safeNext = next || "/dashboard";
   const reduce = useReducedMotion();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [busy, setBusy] = useState(false);
@@ -67,17 +72,17 @@ function PortalAuthPage() {
   useEffect(() => {
     let active = true;
     supabase.auth.getSession().then(({ data }) => {
-      if (active && data.session) navigate({ to: "/dashboard" });
+      if (active && data.session) navigate({ to: safeNext as "/dashboard" });
     });
     return () => {
       active = false;
     };
-  }, [navigate]);
+  }, [navigate, safeNext]);
 
   async function onGoogle() {
     setBusy(true);
     const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: `${window.location.origin}/portal`,
+      redirect_uri: `${window.location.origin}/portal${next ? `?next=${encodeURIComponent(next)}` : ""}`,
     });
     if (result.error) {
       setBusy(false);
@@ -85,7 +90,7 @@ function PortalAuthPage() {
       return;
     }
     if (result.redirected) return;
-    navigate({ to: "/dashboard" });
+    navigate({ to: safeNext as "/dashboard" });
   }
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -100,7 +105,7 @@ function PortalAuthPage() {
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/dashboard`,
+          emailRedirectTo: `${window.location.origin}/portal${next ? `?next=${encodeURIComponent(next)}` : ""}`,
           data: { full_name: String(data.get("full_name") ?? "") },
         },
       });
@@ -110,7 +115,7 @@ function PortalAuthPage() {
         return;
       }
       toast.success("Account created. Check your inbox if confirmation is required.");
-      navigate({ to: "/dashboard" });
+      navigate({ to: safeNext as "/dashboard" });
       return;
     }
 
@@ -120,7 +125,7 @@ function PortalAuthPage() {
       toast.error("That email and password do not match an account.");
       return;
     }
-    navigate({ to: "/dashboard" });
+    navigate({ to: safeNext as "/dashboard" });
   }
 
   const signingIn = mode === "signin";

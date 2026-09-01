@@ -17,9 +17,11 @@ import { Route as ClientLoginRouteImport } from './routes/client-login'
 import { Route as ClientPortalRouteImport } from './routes/client-portal'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as InviteRouteImport } from './routes/invite'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as NewsRouteImport } from './routes/news'
 import { Route as PortalRouteImport } from './routes/portal'
 import { Route as WorkRouteImport } from './routes/work'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedClientRouteRouteImport } from './routes/_authenticated/client/route'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
@@ -35,6 +37,7 @@ import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticat
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as WorkIndexRouteImport } from './routes/work.index'
 import { Route as WorkSlugRouteImport } from './routes/work.$slug'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as AuthenticatedAssistantIndexRouteImport } from './routes/_authenticated/assistant.index'
 import { Route as AuthenticatedAssistantThreadIdRouteImport } from './routes/_authenticated/assistant.$threadId'
 import { Route as AuthenticatedClientDashboardRouteImport } from './routes/_authenticated/client/dashboard'
@@ -83,6 +86,11 @@ const InviteRoute = InviteRouteImport.update({
   path: '/invite',
   getParentRoute: () => rootRouteImport,
 } as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NewsRoute = NewsRouteImport.update({
   id: '/news',
   path: '/news',
@@ -98,6 +106,12 @@ const WorkRoute = WorkRouteImport.update({
   path: '/work',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -174,6 +188,11 @@ const WorkSlugRoute = WorkSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => WorkRoute,
 } as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAssistantIndexRoute =
   AuthenticatedAssistantIndexRouteImport.update({
     id: '/assistant/',
@@ -231,10 +250,12 @@ export interface FileRoutesByFullPath {
   '/client-portal': typeof ClientPortalRoute
   '/contact': typeof ContactRoute
   '/invite': typeof InviteRoute
+  '/mcp': typeof McpRoute
   '/news': typeof NewsRoute
   '/portal': typeof PortalRoute
   '/work': typeof WorkRouteWithChildren
   '/client': typeof AuthenticatedClientRouteRouteWithChildren
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/design': typeof AuthenticatedDesignRoute
@@ -249,6 +270,7 @@ export interface FileRoutesByFullPath {
   '/api/chat': typeof ApiChatRoute
   '/work/$slug': typeof WorkSlugRoute
   '/work/': typeof WorkIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
   '/client/dashboard': typeof AuthenticatedClientDashboardRoute
   '/client/documents': typeof AuthenticatedClientDocumentsRoute
@@ -266,9 +288,11 @@ export interface FileRoutesByTo {
   '/client-portal': typeof ClientPortalRoute
   '/contact': typeof ContactRoute
   '/invite': typeof InviteRoute
+  '/mcp': typeof McpRoute
   '/news': typeof NewsRoute
   '/portal': typeof PortalRoute
   '/client': typeof AuthenticatedClientRouteRouteWithChildren
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/design': typeof AuthenticatedDesignRoute
@@ -283,6 +307,7 @@ export interface FileRoutesByTo {
   '/api/chat': typeof ApiChatRoute
   '/work/$slug': typeof WorkSlugRoute
   '/work': typeof WorkIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
   '/client/dashboard': typeof AuthenticatedClientDashboardRoute
   '/client/documents': typeof AuthenticatedClientDocumentsRoute
@@ -302,10 +327,12 @@ export interface FileRoutesById {
   '/client-portal': typeof ClientPortalRoute
   '/contact': typeof ContactRoute
   '/invite': typeof InviteRoute
+  '/mcp': typeof McpRoute
   '/news': typeof NewsRoute
   '/portal': typeof PortalRoute
   '/work': typeof WorkRouteWithChildren
   '/_authenticated/client': typeof AuthenticatedClientRouteRouteWithChildren
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/design': typeof AuthenticatedDesignRoute
@@ -320,6 +347,7 @@ export interface FileRoutesById {
   '/api/chat': typeof ApiChatRoute
   '/work/$slug': typeof WorkSlugRoute
   '/work/': typeof WorkIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/_authenticated/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
   '/_authenticated/client/dashboard': typeof AuthenticatedClientDashboardRoute
   '/_authenticated/client/documents': typeof AuthenticatedClientDocumentsRoute
@@ -339,10 +367,12 @@ export interface FileRouteTypes {
     | '/client-portal'
     | '/contact'
     | '/invite'
+    | '/mcp'
     | '/news'
     | '/portal'
     | '/work'
     | '/client'
+    | '/.well-known/oauth-protected-resource'
     | '/admin'
     | '/dashboard'
     | '/design'
@@ -357,6 +387,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/work/$slug'
     | '/work/'
+    | '/.lovable/oauth/consent'
     | '/assistant/$threadId'
     | '/client/dashboard'
     | '/client/documents'
@@ -374,9 +405,11 @@ export interface FileRouteTypes {
     | '/client-portal'
     | '/contact'
     | '/invite'
+    | '/mcp'
     | '/news'
     | '/portal'
     | '/client'
+    | '/.well-known/oauth-protected-resource'
     | '/admin'
     | '/dashboard'
     | '/design'
@@ -391,6 +424,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/work/$slug'
     | '/work'
+    | '/.lovable/oauth/consent'
     | '/assistant/$threadId'
     | '/client/dashboard'
     | '/client/documents'
@@ -409,10 +443,12 @@ export interface FileRouteTypes {
     | '/client-portal'
     | '/contact'
     | '/invite'
+    | '/mcp'
     | '/news'
     | '/portal'
     | '/work'
     | '/_authenticated/client'
+    | '/.well-known/oauth-protected-resource'
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
     | '/_authenticated/design'
@@ -427,6 +463,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/work/$slug'
     | '/work/'
+    | '/.lovable/oauth/consent'
     | '/_authenticated/assistant/$threadId'
     | '/_authenticated/client/dashboard'
     | '/_authenticated/client/documents'
@@ -446,10 +483,13 @@ export interface RootRouteChildren {
   ClientPortalRoute: typeof ClientPortalRoute
   ContactRoute: typeof ContactRoute
   InviteRoute: typeof InviteRoute
+  McpRoute: typeof McpRoute
   NewsRoute: typeof NewsRoute
   PortalRoute: typeof PortalRoute
   WorkRoute: typeof WorkRouteWithChildren
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   ApiChatRoute: typeof ApiChatRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -510,6 +550,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InviteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/news': {
       id: '/news'
       path: '/news'
@@ -529,6 +576,13 @@ declare module '@tanstack/react-router' {
       path: '/work'
       fullPath: '/work'
       preLoaderRoute: typeof WorkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin': {
@@ -635,6 +689,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/work/$slug'
       preLoaderRoute: typeof WorkSlugRouteImport
       parentRoute: typeof WorkRoute
+    }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/assistant/': {
       id: '/_authenticated/assistant/'
@@ -777,10 +838,14 @@ const rootRouteChildren: RootRouteChildren = {
   ClientPortalRoute: ClientPortalRoute,
   ContactRoute: ContactRoute,
   InviteRoute: InviteRoute,
+  McpRoute: McpRoute,
   NewsRoute: NewsRoute,
   PortalRoute: PortalRoute,
   WorkRoute: WorkRouteWithChildren,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
   ApiChatRoute: ApiChatRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

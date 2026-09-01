@@ -17,9 +17,11 @@ import { Route as ClientLoginRouteImport } from './routes/client-login'
 import { Route as ClientPortalRouteImport } from './routes/client-portal'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as InviteRouteImport } from './routes/invite'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as NewsRouteImport } from './routes/news'
 import { Route as PortalRouteImport } from './routes/portal'
 import { Route as WorkRouteImport } from './routes/work'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedClientRouteRouteImport } from './routes/_authenticated/client/route'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
@@ -83,6 +85,11 @@ const InviteRoute = InviteRouteImport.update({
   path: '/invite',
   getParentRoute: () => rootRouteImport,
 } as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NewsRoute = NewsRouteImport.update({
   id: '/news',
   path: '/news',
@@ -98,6 +105,12 @@ const WorkRoute = WorkRouteImport.update({
   path: '/work',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -231,10 +244,12 @@ export interface FileRoutesByFullPath {
   '/client-portal': typeof ClientPortalRoute
   '/contact': typeof ContactRoute
   '/invite': typeof InviteRoute
+  '/mcp': typeof McpRoute
   '/news': typeof NewsRoute
   '/portal': typeof PortalRoute
   '/work': typeof WorkRouteWithChildren
   '/client': typeof AuthenticatedClientRouteRouteWithChildren
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/design': typeof AuthenticatedDesignRoute
@@ -266,9 +281,11 @@ export interface FileRoutesByTo {
   '/client-portal': typeof ClientPortalRoute
   '/contact': typeof ContactRoute
   '/invite': typeof InviteRoute
+  '/mcp': typeof McpRoute
   '/news': typeof NewsRoute
   '/portal': typeof PortalRoute
   '/client': typeof AuthenticatedClientRouteRouteWithChildren
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/design': typeof AuthenticatedDesignRoute
@@ -302,10 +319,12 @@ export interface FileRoutesById {
   '/client-portal': typeof ClientPortalRoute
   '/contact': typeof ContactRoute
   '/invite': typeof InviteRoute
+  '/mcp': typeof McpRoute
   '/news': typeof NewsRoute
   '/portal': typeof PortalRoute
   '/work': typeof WorkRouteWithChildren
   '/_authenticated/client': typeof AuthenticatedClientRouteRouteWithChildren
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/design': typeof AuthenticatedDesignRoute
@@ -339,10 +358,12 @@ export interface FileRouteTypes {
     | '/client-portal'
     | '/contact'
     | '/invite'
+    | '/mcp'
     | '/news'
     | '/portal'
     | '/work'
     | '/client'
+    | '/.well-known/oauth-protected-resource'
     | '/admin'
     | '/dashboard'
     | '/design'
@@ -374,9 +395,11 @@ export interface FileRouteTypes {
     | '/client-portal'
     | '/contact'
     | '/invite'
+    | '/mcp'
     | '/news'
     | '/portal'
     | '/client'
+    | '/.well-known/oauth-protected-resource'
     | '/admin'
     | '/dashboard'
     | '/design'
@@ -409,10 +432,12 @@ export interface FileRouteTypes {
     | '/client-portal'
     | '/contact'
     | '/invite'
+    | '/mcp'
     | '/news'
     | '/portal'
     | '/work'
     | '/_authenticated/client'
+    | '/.well-known/oauth-protected-resource'
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
     | '/_authenticated/design'
@@ -446,9 +471,11 @@ export interface RootRouteChildren {
   ClientPortalRoute: typeof ClientPortalRoute
   ContactRoute: typeof ContactRoute
   InviteRoute: typeof InviteRoute
+  McpRoute: typeof McpRoute
   NewsRoute: typeof NewsRoute
   PortalRoute: typeof PortalRoute
   WorkRoute: typeof WorkRouteWithChildren
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   ApiChatRoute: typeof ApiChatRoute
 }
 
@@ -510,6 +537,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InviteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/news': {
       id: '/news'
       path: '/news'
@@ -529,6 +563,13 @@ declare module '@tanstack/react-router' {
       path: '/work'
       fullPath: '/work'
       preLoaderRoute: typeof WorkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin': {
@@ -777,9 +818,12 @@ const rootRouteChildren: RootRouteChildren = {
   ClientPortalRoute: ClientPortalRoute,
   ContactRoute: ContactRoute,
   InviteRoute: InviteRoute,
+  McpRoute: McpRoute,
   NewsRoute: NewsRoute,
   PortalRoute: PortalRoute,
   WorkRoute: WorkRouteWithChildren,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
   ApiChatRoute: ApiChatRoute,
 }
 export const routeTree = rootRouteImport

@@ -87,22 +87,28 @@ export function GoogleSignInButton({
               token: response.credential,
             });
             if (error) {
+              console.error("Google sign in: signInWithIdToken failed", error);
               onError("Google sign in did not complete. Try again or use your email and password.");
               return;
             }
             onSuccess();
           },
         });
+        const measured = containerRef.current.getBoundingClientRect().width;
+        const width = Math.min(400, Math.max(200, Math.round(measured) || 336));
         window.google.accounts.id.renderButton(containerRef.current, {
           theme: "filled_black",
           size: "large",
           shape: "pill",
           text: "continue_with",
           logo_alignment: "center",
-          width: 336,
+          width,
         });
       })
-      .catch(() => onError("Google sign in is unavailable right now."));
+      .catch((err) => {
+        console.error("Google sign in: script failed to load", err);
+        onError("Google sign in is unavailable right now.");
+      });
 
     return () => {
       cancelled = true;

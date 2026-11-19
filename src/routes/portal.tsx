@@ -11,13 +11,13 @@ import wordmarkDark from "@/assets/brix-wordmark-dark.svg";
 import authPanel from "@/assets/auth-panel.jpg";
 
 export const Route = createFileRoute("/portal")({
-  validateSearch: (search: Record<string, unknown>) => ({
+  validateSearch: (search: Record<string, unknown>): { next?: string | undefined } => ({
     next:
-      typeof search.next === "string" &&
-      search.next.startsWith("/") &&
-      !search.next.startsWith("//")
-        ? search.next
-        : "",
+      typeof search["next"] === "string" &&
+      search["next"].startsWith("/") &&
+      !search["next"].startsWith("//")
+        ? search["next"]
+        : undefined,
   }),
   head: () => ({
     meta: [

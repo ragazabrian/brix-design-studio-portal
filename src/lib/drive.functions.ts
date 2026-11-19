@@ -50,7 +50,7 @@ export const uploadToStudioDrive = createServerFn({ method: "POST" })
     const { error: insertError } = await context.supabase.from("chat_attachments").insert({
       thread_id: data.threadId ?? null,
       user_id: context.userId,
-      storage_path: path,
+      drive_file_id: path,
       name: data.name,
       mime_type: mimeType,
       size_bytes: bytes.length,

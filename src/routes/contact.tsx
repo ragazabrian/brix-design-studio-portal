@@ -52,10 +52,10 @@ function ContactPage() {
 
     setSending(true);
     const { error } = await supabase.from("contact_messages").insert({
-      name: String(data.get("name") ?? ""),
-      email: String(data.get("email") ?? ""),
+      name: String(data.get("name") ?? "").trim(),
+      email: String(data.get("email") ?? "").trim(),
       company: String(data.get("company") ?? "") || null,
-      message: String(data.get("message") ?? ""),
+      message: String(data.get("message") ?? "").trim(),
     });
     setSending(false);
 
@@ -83,7 +83,7 @@ function ContactPage() {
               <label htmlFor="name" className="label-caps mb-2 block text-muted-foreground">
                 Your name
               </label>
-              <input id="name" name="name" required autoComplete="name" className={inputClass} />
+              <input id="name" name="name" required maxLength={200} autoComplete="name" className={inputClass} />
             </div>
             <div>
               <label htmlFor="email" className="label-caps mb-2 block text-muted-foreground">
@@ -94,6 +94,7 @@ function ContactPage() {
                 name="email"
                 type="email"
                 required
+                maxLength={320}
                 autoComplete="email"
                 placeholder="name@work-email.com"
                 className={inputClass}
@@ -103,7 +104,7 @@ function ContactPage() {
               <label htmlFor="company" className="label-caps mb-2 block text-muted-foreground">
                 Company (optional)
               </label>
-              <input id="company" name="company" autoComplete="organization" className={inputClass} />
+              <input id="company" name="company" maxLength={200} autoComplete="organization" className={inputClass} />
             </div>
             <div>
               <label htmlFor="message" className="label-caps mb-2 block text-muted-foreground">
@@ -113,6 +114,7 @@ function ContactPage() {
                 id="message"
                 name="message"
                 required
+                maxLength={5000}
                 rows={6}
                 className={`${inputClass} resize-y`}
               />
